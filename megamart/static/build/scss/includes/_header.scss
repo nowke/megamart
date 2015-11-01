@@ -1,0 +1,56 @@
+@import "variables";
+
+.header {
+	height: $header-height;
+	
+	box-shadow: 0 1px 3px rgba(93,78,113,0.12), 0 1px 2px rgba(93,78,113,0.24);
+}
+
+.logo, .nav-grid, .header-grid, nav, nav ul, nav li {
+	display: flex;
+    height: 100%;
+    align-items: center;
+}
+
+.logo a:link, .logo a:visited {
+	text-decoration: none;
+	color: $primary-text-color;
+	font-size: $logo-font-size;
+}
+
+.logo h1 {
+	margin: 0;
+}
+
+.nav-grid {
+    flex-direction: row-reverse;
+}
+
+nav ul {
+	margin: 0;
+	list-style-type: none;
+}
+
+nav a:link, nav a:visited {
+	padding: 20px;
+	text-decoration: none;
+	color: $primary-text-color;
+	font-size: $nav-link-font;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	transition: all .1s linear;
+	font-family: aleoregular;
+}
+
+nav a:hover, nav a:active {
+	color: $primary-text-hover;
+}
+
+.inverted {
+	background-color: $primary-text-color;
+	color: #fff;
+}
+
+.inverted nav a:link, .inverted nav a:visited, .inverted .logo a:link, .inverted .logo a:visited {
+	color: #fff;
+}

@@ -1,0 +1,16 @@
+{% extends 'megamart/base.html' %}
+
+{% block content %}
+
+<div class="small-container">
+	<form method="POST" action="">
+	{% csrf_token %}
+		<h2> Login </h2>
+		<input type="text" name="username" placeholder="User Name" autofocus>
+		<input type="password" name="password" placeholder="Password">
+		<input type="submit" class="btn" value="Login">
+	</form>
+</div>
+{% endblock %}
+
+{% block head-color %}inverted{% endblock %}

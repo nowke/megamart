@@ -9,6 +9,7 @@ class MegaMartUser(models.Model):
 	user = models.OneToOneField(User, unique=True)
 	name = models.CharField(max_length=40)
 	phone = models.BigIntegerField()
+	email = models.EmailField()
 
 	def __str__(self):
 		return self.name

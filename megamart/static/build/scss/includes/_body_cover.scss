@@ -1,0 +1,55 @@
+@import "variables";
+
+.body-cover {
+	height: calc(100vh - #{$header-height});
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: $primary-color;
+}
+
+.body-cover h1 {
+	text-align: center;
+	margin-top: 10%;
+	font-size: 4.3em;
+	letter-spacing: 5px;
+	font-family: aleolight;
+}
+
+.body-cover {
+	color: #fff;
+}
+
+.body-cover .bold {
+	font-family: aleoregular;
+}
+
+.body-cover h2 {
+	margin: 0;
+	text-align: center;
+	font-size: 2em;
+	text-transform: uppercase;
+	font-family: aleolight;
+	letter-spacing: 5px;
+}
+
+.body-cover a:link, .body-cover a:visited {
+	margin-top: auto;
+	margin-bottom: 10%;
+	text-align: center;
+	text-decoration: none;
+	font-size: 2em;
+	background-color: $primary-text-hover;
+	padding: 20px 80px;
+	width: auto;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+	color: #fff;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	transition: all .3s ease-out;
+}
+
+.body-cover a:active, .body-cover a:hover {
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	background-color: darken($primary-text-hover, 5%);
+}

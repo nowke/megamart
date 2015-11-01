@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Megamart</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    {% load staticfiles %}
+	<link href="{% static 'css/simpleGrid.min.css' %}" type="text/css" rel="stylesheet">
+	<link href="{% static 'css/fonts.min.css' %}" type="text/css" rel="stylesheet">
+	<link href="{% static 'css/styles.min.css' %}" type="text/css" rel="stylesheet">
+
+	{% block cssimport %}{% endblock %}
+</head>
+
+<body>
+
+	<!-- HEADER -->
+	<header class="header {% block head-color %}{% endblock %}">
+		<div class="grid header-grid">
+
+			<!-- TITLE -->
+			<div class="col-1-3 logo">
+				<a href="{% url 'home' %}">
+					<h1> megamart </h1>
+				</a>
+			</div>
+
+			<!-- NAVIGATION -->
+			<div class="col-2-3 nav-grid">
+				<nav>
+					<ul>
+						<li><a href="#"> Find Stores </a></li>
+						<li><a href="{% url 'register' %}"> Register </a></li>
+						<li><a href="{% url 'login' %}"> Login </a></li>
+					</ul>
+				</nav>
+			</div>
+
+		</div>	
+	</header>
+
+	{% block content %}
+
+	{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends 'megamart/base.html' %}
+{% block content %}
+
+<div class="small-container">
+	<form method="POST" action="">
+	{% csrf_token %}
+		<h2> Register </h2>
+		<input type="text" name="username" placeholder="User Name" autofocus>
+		<input type="email" name="email" placeholder="Email">
+		<input type="password" name="password" placeholder="Password">
+		<input type="password" name="password_copy" placeholder="Retype Password">
+		<input type="text" name="full_name" placeholder="Full Name">
+		<input type="tel" name="phone" placeholder="Phone No.">
+		<input type="submit" class="btn" value="Register">
+	</form>
+</div>	
+
+{% endblock %}
+
+{% block head-color %}inverted{% endblock %}
