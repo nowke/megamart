@@ -1,0 +1,181 @@
+@import "includes/variables";
+
+body {
+	height: 100%;
+    margin: 0;
+    background: $dashboard-content-background;
+    font-family: aleolight;
+}
+
+section.dashboard {
+	width: 16%;
+    height: 100%;
+    position: fixed;
+    background: $dashboard-background;
+}
+
+section.dashboard ul {
+	width: 100%;
+	list-style-type: none;
+	padding: 0;
+}
+
+section.dashboard ul a:link, section.dashboard ul a:visited {
+	width: 100%;
+	padding: 15px 20px;
+	color: #fff;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 1.3em;
+	font-family: aleoregular;
+}
+
+section.dashboard ul a:hover, section.dashboard ul a:active, section.dashboard ul a.active {
+	background: darken($dashboard-background, 5%);
+}
+
+section.content {
+	width: 84%;
+    height: auto;
+    position: absolute;
+    right: 0;
+}
+
+.logo {
+	height: 70px;
+	background: darken($primary-text-color, 5%);
+	width: 100%; 
+}
+
+.logo a:link, .logo a:visited {
+	text-decoration: none;
+	color: #fff;
+	font-size: $logo-font-size;
+	text-align: center;
+	height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1 {
+	margin: 0;
+}
+
+.dashboard-top {
+	width: 100%;
+	height: 70px;
+	max-height: 70px;
+	background: $primary-text-color;
+	max-width: inherit;
+	position: fixed;
+	flex-direction: row-reverse;
+	align-items: center;
+    display: flex;
+    width: inherit;
+}
+
+.dashboard-top a:link, .dashboard-top a:visited {
+	max-height: inherit;
+	display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+    padding: 0 15px;
+    font-family: aleolight;
+    font-size: 1.3em;
+    letter-spacing: 2px;
+}
+
+.dashboard-top a:hover, .dashboard-top a:active {
+	background: darken($primary-text-color, 5%);
+} 
+
+.dashboard-top img {
+		width: 40px;
+	height: 40px;
+	margin-right: 15px;
+}
+
+.dashboard-content {
+	margin-top: 70px;
+	max-width: inherit;
+	padding: 20px;
+}
+
+.full-width {
+	max-width: 100%;
+	margin-top: 20px;
+}
+
+.small-stats {
+	width: 100%;
+	box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+	height: 75px;
+	display: flex;
+	align-items: center;
+}
+
+.color-blue {
+	background: $dashboard-blue;
+}
+
+.color-orange {
+	background: $dashboard-orange;
+}
+
+.color-green {
+	background: $dashboard-green;
+}
+
+.color-gray {
+	background: $dashboard-gray;
+}
+
+.small-stats.color-blue i {
+	background: darken($dashboard-blue, 5%);
+}
+
+.small-stats.color-orange i {
+	background: darken($dashboard-orange, 5%);
+}
+
+.small-stats.color-green i {
+	background: darken($dashboard-green, 5%);
+}
+
+.small-stats.color-gray i {
+	background: darken($dashboard-gray, 5%);
+}
+
+.small-stats i {
+	font-size: 3.5em;
+	padding: 5px;
+	color: #fff;
+	height: 100%;
+	    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.small-stats-desc {
+	height: 100%;
+	    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h4, h5 {
+	margin: 0 10px;
+	color: #fff;
+}
+
+h4 {
+	font-size: 1.5em;
+	font-family: aleolight;
+}
+
+h5 {
+	font-size: 1.1em;
+}

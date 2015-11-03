@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Megamart Administration - Home</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	{% load staticfiles %}
+	<link href="{% static 'css/simpleGrid.min.css' %}" type="text/css" rel="stylesheet">
+	<link href="{% static 'css/fonts.min.css' %}" type="text/css" rel="stylesheet">
+	<link href="{% static 'css/dashboard.min.css' %}" type="text/css" rel="stylesheet">
+	<link href="{% static 'css/font-awesome.min.css' %}" type="text/css" rel="stylesheet">
+	{% block cssimport %}{% endblock %}
+
+</head>
+<body>
+
+<section class="dashboard">
+	<div class="logo">
+		<a href="{% url 'admin_home' %}">
+			<h1> megamart </h1>
+		</a>
+	</div>
+
+	<ul>
+		<li><a href="#" class="{% block nav_home %}{% endblock %}"> Dashboard </a></li>
+		<li><a href="#" class="{{% block nav_branches %}{% endblock %}"> Branches </a></li>
+		<li><a href="#" class="{{% block nav_employees %}{% endblock %}"> Employees </a></li>
+		<li><a href="#" class="{{% block nav_analytics %}{% endblock %}"> Analytics </a></li>
+	</ul>
+</section>
+
+<section class="content">
+	<div class="dashboard-top">
+		<a href="{% url 'logout' %}">
+			<h5> Logout </h5>
+		</a>
+		<a href="#">
+			<img src="{% static 'img/avatar.png' %}">
+			<h5> John Doe </h5>
+		</a>
+	</div>
+	<div class="dashboard-content">
+	{% block content %}
+
+	{% endblock %}
+	</div>
+	
+</section>
+
+</body>
+</html>

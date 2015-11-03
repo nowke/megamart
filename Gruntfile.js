@@ -15,6 +15,7 @@ module.exports = function(grunt) {
 					'megamart/static/dist/css/styles.min.css': 'megamart/static/build/scss/styles.scss',
 					'megamart/static/dist/css/fonts.min.css': 'megamart/static/build/scss/fonts.scss',
 					'megamart/static/dist/css/simpleGrid.min.css': 'megamart/static/build/scss/simpleGrid.scss',
+					'megamart/static/dist/css/dashboard.min.css': 'megamart/static/build/scss/dashboard.scss',
 				}
 			}
 		},

@@ -1,0 +1,51 @@
+{% extends 'megamart/admin/base_dashboard.html' %}
+
+{% block content %}
+
+<h1> Dashboard </h1>
+
+<div class="grid full-width">
+	<div class="col-1-4">
+		<div class="small-stats color-blue">
+			<i class="fa fa-fw fa-gear"></i>
+			<div class="small-stats-desc">
+				<h5> CPU Usage </h5>
+				<h4> 90% </h4>
+			</div>	
+		</div>	
+	</div>
+
+	<div class="col-1-4">
+		<div class="small-stats color-orange">
+			<i class="fa fa-fw fa-users"></i>
+			<div class="small-stats-desc">
+				<h5> Total Customers </h5>
+				<h4> 4200 </h4>
+			</div>	
+		</div>	
+	</div>
+
+	<div class="col-1-4">
+		<div class="small-stats color-green">
+			<i class="fa fa-fw fa-user-plus"></i>
+			<div class="small-stats-desc">
+				<h5> New Customers </h5>
+				<h4> 56 </h4>
+			</div>	
+		</div>	
+	</div>
+
+	<div class="col-1-4">
+		<div class="small-stats color-gray">
+			<i class="fa fa-fw fa-shopping-cart"></i>
+			<div class="small-stats-desc">
+				<h5> Unique Orders </h5>
+				<h4> 6500</h4>
+			</div>	
+		</div>	
+	</div>
+</div>
+
+{% endblock %}
+
+{% block nav_home %}active{% endblock %}
