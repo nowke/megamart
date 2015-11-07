@@ -2,44 +2,27 @@
 
 {% block content %}
 
-<h1> Bangalore </h1>
+{% for city in cities %}
+	<h1> {{ city.name }} </h1>
 
-<div class="grid full-width">
-	<div class="col-1-4">
-		<div class="box">
-			<h3> RR Nagar </h3>
-			<p>  18/2, Gopalan – The Arch Mall, Near The Arch, Mysore Road, Rajeshwari Nagar </p>
+	<div class="grid full-width">
+		{% for branch in city.branch_set.all %}
+		<div class="col-1-4">
+			<div class="box">
+				<h3> {{ branch.title|title }} </h3>
+				<p>  {{ branch.address|title }} </p>
+			</div>
+		</div>		
+		{% endfor %}
+
+		<div class="col-1-4">
+			<div class="add_branch_box">
+				<i class="fa fa-fw fa-plus-circle"></i>
+				<h3> Add Branch </h3>
+			</div>
 		</div>
 	</div>
-
-	<div class="col-1-4">
-		<div class="box">
-			<h3> RR Nagar </h3>
-			<p>  18/2, Gopalan – The Arch Mall, Near The Arch, Mysore Road, Rajeshwari Nagar </p>
-		</div>
-	</div>	
-
-	<div class="col-1-4">
-		<div class="box">
-			<h3> RR Nagar </h3>
-			<p>  18/2, Gopalan – The Arch Mall, Near The Arch, Mysore Road, Rajeshwari Nagar </p>
-		</div>
-	</div>	
-
-	<div class="col-1-4">
-		<div class="box">
-			<h3> RR Nagar </h3>
-			<p>  18/2, Gopalan – The Arch Mall, Near The Arch, Mysore Road, Rajeshwari Nagar </p>
-		</div>
-	</div>	
-
-	<div class="col-1-4">
-		<div class="box">
-			<h3> RR Nagar </h3>
-			<p>  18/2, Gopalan – The Arch Mall, Near The Arch, Mysore Road, Rajeshwari Nagar </p>
-		</div>
-	</div>		
-</div>
+{% endfor %}
 
 {% endblock %}
 

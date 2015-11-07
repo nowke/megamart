@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.core.urlresolvers import reverse_lazy
 
 from .mixins import AdminRequiredMixin
+from admins.models import City, Branch, StoreAdmin
 
 class HomePageView(TemplateView):
 	template_name = "megamart/home.html"
@@ -43,3 +44,10 @@ class AdminHomeView(AdminRequiredMixin, TemplateView):
 
 class AdminBranchesView(AdminRequiredMixin, TemplateView):
 	template_name = "megamart/admin/branches.html"
+
+	def get(self, request):
+		cities = City.objects.all()
+		context = {
+			'cities': cities,
+		}
+		return render(request, self.template_name, context)
