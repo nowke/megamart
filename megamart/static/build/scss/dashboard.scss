@@ -1,4 +1,5 @@
 @import "includes/variables";
+@import "includes/input";
 
 body {
 	height: 100%;
@@ -112,6 +113,19 @@ h1 {
 	text-transform: uppercase;
 }
 
+.dashboard-content h2 {
+	margin:0;
+}
+
+.dashboard-content h2 a:link, .dashboard-content h2 a:visited {
+	text-decoration: none;
+	color: darken($primary-text-color, 5%);
+}
+
+.dashboard-content h2 a:active, .dashboard-content h2 a:hover  {
+	color: $primary-text-hover;
+}
+
 .full-width {
 	max-width: 100%;
 	margin-top: 20px;
@@ -222,12 +236,49 @@ h5 {
 	cursor: pointer;
 }
 
+.add_branch_box:hover i, .add_branch_box:hover h3 {
+	color: black;
+}
+
 .add_branch_box i {
 	font-size: 4em;
 	color: gray;
+	transition: color .3s linear;
 }
 
 .add_branch_box h3 {
 	font-size: 1.5em;
 	color: gray;
+	transition: color .3s linear;
+}
+
+.form-container {
+	width: 100%;
+	max-width: 500px;
+	align-self: center;
+}
+.form-container form {
+	display: flex;
+	flex-direction: column;
+}
+
+.content-center {
+	justify-content: center;
+}
+
+.messages {
+	list-style-type: none;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 500px;
+}
+
+.messages li {
+    padding: 10px;
+    background-color: #00a65a;
+    text-align: center;
+    margin: 10px;
+    color: #fff;
+    border-radius: 5px;
+    border: 1px solid #008d4c;
 }

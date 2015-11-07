@@ -1,0 +1,64 @@
+{% extends 'megamart/admin/base_dashboard.html' %}
+
+{% block content %}
+<h2> <a href="{% url 'admin_branches' %}">Branches</a> <small>&gt;</small> New Branch </h2>
+
+<ul class="messages" id="messages">
+    <li class="success" id="success">
+    	
+    </li>
+</ul>
+
+<div class="grid full-width content-center">
+	<div class="form-container">
+		<form method="POST" action="" id="add_branch_form">
+		{% csrf_token %}
+			<input type="text" name="name" placeholder="Branch Name" autofocus required>
+			<select name="city">
+				{% for city in cities %}
+				<option value="{{ city.id }}" {% if default_city_id == city.id %}selected{% endif %}>
+					{{ city.name }}
+				</option>
+				{% endfor %}
+			</select>
+			<textarea name="address" placeholder="Address" rows="5" required></textarea>
+			
+			<input type="submit" class="btn" value="Save branch" id="submit_btn">
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block nav_branches %}active{% endblock %}
+
+{% block javascript %}
+<script>
+	$("#messages").hide();
+
+	$("#submit_btn").click(function(event) {
+		event.preventDefault();
+		var formData = $("#add_branch_form").serialize();
+
+		$.ajax({
+			type: "POST",
+			url: "{% url 'admin_add_branch' %}",
+			data: formData,
+			success: function(data) {
+				$("#messages").show();
+				var successStr = "<i class=\"fa fa-fw fa-check\"></i> Branch  \
+				<strong>" + data['branch_title'] + "</strong> has been added successfully!";
+
+				$("#success").html(successStr);
+				$("#add_branch_form").trigger('reset');
+
+		        $("#success").delay(5000).fadeOut('slow');
+
+			},
+			error: function(response, error) {
+				console.log(error);
+			}
+		})
+	}) 
+</script>
+{% endblock %}

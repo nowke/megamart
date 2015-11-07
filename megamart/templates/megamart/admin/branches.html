@@ -16,7 +16,8 @@
 		{% endfor %}
 
 		<div class="col-1-4">
-			<div class="add_branch_box">
+			{% url 'admin_add_branch' as new_branch_url %}
+			<div class="add_branch_box" onclick="window.location = '{{ new_branch_url }}?city={{ city.id }}'">
 				<i class="fa fa-fw fa-plus-circle"></i>
 				<h3> Add Branch </h3>
 			</div>

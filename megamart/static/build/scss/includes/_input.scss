@@ -1,0 +1,46 @@
+@import "variables";
+
+input[type=text], input[type=password],
+input[type=email], input[type=tel],
+textarea, select {
+	margin: 10px;
+	font-size: 1.3em;
+	box-shadow: none;
+	border: 1px solid #e0e0e0;
+	padding: 5px;
+	min-height: 50px;
+	font-family: aleolight;
+	color: $primary-text-color;
+	transition: all .3s linear;
+	background-color: #FFF;
+}
+
+input[type=text]:focus, input[type=text].focus,
+input[type=password]:focus, input[type=password].focus,
+input[type=email]:focus, input[type=email].focus,
+input[type=tel]:focus, input[type=tel].focus,
+textarea.focus, textarea:focus,
+select.focus, select:focus
+{
+	outline: none;
+	border-color: $primary-text-color;
+}
+
+.btn {
+	min-height: 50px;
+	padding: 5px;
+	margin: 10px;
+	background-color: $primary-text-color;
+	border: none;
+	font-size: 1.3em;
+	font-family: aleoregular;
+	color: #fff;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	cursor: pointer;
+	transition: all .3s linear;
+}
+
+.btn:hover, .btn:active, .btn.hover, .btn.active {
+	background-color: darken($primary-text-color, 5%);
+}
