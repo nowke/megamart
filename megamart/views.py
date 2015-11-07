@@ -40,3 +40,6 @@ class RegisterPageView(TemplateView):
 # DB Admin specific views
 class AdminHomeView(AdminRequiredMixin, TemplateView):
 	template_name = "megamart/admin/home.html"
+
+class AdminBranchesView(AdminRequiredMixin, TemplateView):
+	template_name = "megamart/admin/branches.html"

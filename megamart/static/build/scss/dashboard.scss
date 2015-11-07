@@ -4,7 +4,7 @@ body {
 	height: 100%;
     margin: 0;
     background: $dashboard-content-background;
-    font-family: aleolight;
+    font-family: open_sansregular;
 }
 
 section.dashboard {
@@ -27,7 +27,7 @@ section.dashboard ul a:link, section.dashboard ul a:visited {
 	text-decoration: none;
 	display: inline-block;
 	font-size: 1.3em;
-	font-family: aleoregular;
+	font-family: open_sansregular;
 }
 
 section.dashboard ul a:hover, section.dashboard ul a:active, section.dashboard ul a.active {
@@ -60,6 +60,8 @@ section.content {
 
 h1 {
 	margin: 0;
+	font-family: aleoregular;
+	letter-spacing:1px;	
 }
 
 .dashboard-top {
@@ -83,9 +85,9 @@ h1 {
     text-decoration: none;
     color: #fff;
     padding: 0 15px;
-    font-family: aleolight;
+    font-family: open_sanslight;
     font-size: 1.3em;
-    letter-spacing: 2px;
+    height: 100%;
 }
 
 .dashboard-top a:hover, .dashboard-top a:active {
@@ -104,9 +106,17 @@ h1 {
 	padding: 20px;
 }
 
+.dashboard-content h1 {
+	font-family: open_sansregular;
+	font-size: 1.5em;
+	text-transform: uppercase;
+}
+
 .full-width {
 	max-width: 100%;
 	margin-top: 20px;
+	    display: flex;
+    flex-wrap: wrap;
 }
 
 .small-stats {
@@ -173,9 +183,32 @@ h4, h5 {
 
 h4 {
 	font-size: 1.5em;
-	font-family: aleolight;
+	font-family: open_sanslight;
 }
 
 h5 {
-	font-size: 1.1em;
+	font-size: 1em;
+}
+
+.box {
+	display: flex;
+	background: #fff;
+	flex-direction: column;
+	padding: 10px;
+	margin-bottom: 20px;
+	height: 200px;
+	box-shadow: 0 1px 3px rgba(93,78,113,0.12), 0 1px 2px rgba(93,78,113,0.24);
+	cursor: pointer;	
+	transition: box-shadow .3s linear;
+}
+
+.box:hover, .box:active {
+	box-shadow: 0 10px 20px rgba(93,78,113,0.19), 0 6px 6px rgba(93,78,113,0.23);
+
+}
+
+.box h3 {
+	margin: 5px 0;
+	padding: 5px 0;
+	border-bottom: 1px solid #ECECEC;
 }

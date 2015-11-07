@@ -15,6 +15,7 @@ class City(models.Model):
 class Branch(models.Model):
 	title = models.CharField(max_length=100)
 	city = models.ForeignKey(City)
+	address = models.TextField(max_length=256, default='')
 
 	def __str__(self):
 		return "%s, %s" % (self.title, self.city.name)

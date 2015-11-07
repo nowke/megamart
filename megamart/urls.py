@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-from .views import LoginPageView, HomePageView, RegisterPageView, AdminHomeView, LogoutView
+from .views import LoginPageView, HomePageView, RegisterPageView, AdminHomeView, LogoutView, AdminBranchesView
 
 urlpatterns = patterns('',
     url(r'^$', HomePageView.as_view(), name='home'),
@@ -11,6 +11,7 @@ urlpatterns = patterns('',
 
     # DB Admin views
     url(r'^administrator/home$', AdminHomeView.as_view(), name='admin_home'),
+    url(r'^administrator/branches$', AdminBranchesView.as_view(), name='admin_branches'),
 
     url(r'^dashboard/', include('customer.urls', namespace='customer')),
     url(r'^manage_product/', include('product_manager.urls', namespace='product_manager')),
