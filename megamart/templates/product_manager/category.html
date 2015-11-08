@@ -1,0 +1,40 @@
+{% extends 'product_manager/dashboard.html' %}
+
+{% block content %}
+
+<div class="grid full-width">
+	<div class="col-1-2">
+		<h2> <a href="{% url 'product_manager:home' %}">Products</a> <small>&gt;</small> {{ category.title }} </h2>
+	</div>
+	<div class="col-1-2" style="padding-right:0;">
+		<a href="{% url 'product_manager:add_product' category.id %}" class="btn-add"> <i class="fa fa-fw fa-plus-circle"></i> New product </a>
+	</div>
+</div>
+
+<table>
+	<thead>
+		<tr>
+			<th> Sl. No </th>
+			<th> Product </th>
+			<th> Price/unit </th>
+			<th> Actions </th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for product in category.product_set.all %}
+		<tr>
+			<td> {{ forloop.counter }} </td>
+			<td> {{ product.name }}</td>
+			<td> {{ product.price }} </td>
+			<td> 
+				<a href="#" class="btn-warning"> <i class="fa fa-fw fa-edit"></i>Edit </a> 
+				<a href="#" class="btn-danger"> <i class="fa fa-fw fa-trash"></i>Delete </a>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
+
+{% block nav_products %}active{% endblock %}

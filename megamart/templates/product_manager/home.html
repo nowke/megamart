@@ -1,0 +1,26 @@
+{% extends 'product_manager/dashboard.html' %}
+
+{% block content %}
+<div class="grid full-width">
+	<div class="col-1-2">
+		<h1> Select Category </h1>
+	</div>
+	<div class="col-1-2" style="padding-right:0;">
+		<a href="{% url 'product_manager:add_category' %}" class="btn-add"> <i class="fa fa-fw fa-plus-circle"></i> Add Category </a>
+	</div>
+</div>
+
+<div class="grid full-width">
+	{% for category in categories %}
+	{% url 'product_manager:category' category.id as cat_url %}
+	<div class="col-1-4" onclick="window.location = '{{ cat_url }}'">
+		<div class="box box-small">
+			<h3> {{ category.title }} </h3>
+			<h2> {{ category.product_set.count }} items </h2>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}
+
+{% block nav_products %}active{% endblock %}

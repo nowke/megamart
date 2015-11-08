@@ -1,0 +1,11 @@
+{% extends 'megamart/admin/base_dashboard.html' %}
+
+{% block content %}
+
+
+{% endblock %}
+
+{% block nav %}
+	<li><a href="{% url 'product_manager:home' %}" class="{% block nav_products %}{% endblock %}"> Products </a></li>
+	<li><a href="{% url 'product_manager:add_category' %}" class="{% block nav_add_category %}{% endblock %}"> Add category </a></li>
+{% endblock %}

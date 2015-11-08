@@ -3,12 +3,15 @@ from django.views.generic import View
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
+from django.contrib.auth.models import User
 
 from .mixins import AdminRequiredMixin
 from admins.models import City, Branch, StoreAdmin
+from store.models import Employee
+from product_manager.models import ProductManager
 
 class HomePageView(TemplateView):
 	template_name = "megamart/home.html"
@@ -32,7 +35,12 @@ class LoginPageView(TemplateView):
 				login(request, user)
 				return redirect('admin_home')
 			else:
-				print 'Disabled'
+				try:
+					product_manager = ProductManager(user=user)
+					login(request, user)
+					return redirect('product_manager:home')
+				except ProductManager.DoesNotExist:
+					print 'No Product manager'
 		else:
 			print 'Invalid login'
 
@@ -83,3 +91,121 @@ class AdminAddBranchView(AdminRequiredMixin, TemplateView):
 
 		if request.is_ajax():
 			return JsonResponse({"success": True, "branch_title": branch.title})
+
+class AdminBranchDetailView(AdminRequiredMixin, TemplateView):
+	template_name = "megamart/admin/branch_detail.html"
+
+	def get(self, request, branch_id):
+		try:
+			branch = Branch.objects.get(id=branch_id)
+
+			context = {
+				'branch': branch,
+			}
+
+			return render(request, self.template_name, context)
+
+		except Branch.DoesNotExist:
+			raise Http404("Branch does not exist")
+
+class AdminEmployeeNewView(AdminRequiredMixin, TemplateView):
+	template_name = "megamart/admin/employee_new.html"
+
+	def get(self, request, branch_id):
+		try:
+			branch = Branch.objects.get(id=branch_id)
+
+			context = {
+				'branch': branch,
+			}
+
+			return render(request, self.template_name, context)
+
+		except Branch.DoesNotExist:
+			raise Http404("Branch does not exist")
+
+	def post(self, request, branch_id):
+
+		name = request.POST['name']
+		salary = request.POST['salary']
+		phone = request.POST['phone']
+
+		branch_obj = Branch.objects.get(id=int(branch_id))
+		employee = Employee(name=name, salary=salary, phone=phone, branch=branch_obj)
+		employee.save()
+
+		if request.is_ajax():
+			return JsonResponse({"success": True, "employee_name": employee.name})
+
+class AdminEditEmployeeView(AdminRequiredMixin, TemplateView):
+	template_name = "megamart/admin/employee_new.html"
+
+	def get(self, request, branch_id, employee_id):
+		try:
+			employee = Employee.objects.get(id=employee_id)
+			branch = Branch.objects.get(id=branch_id)
+
+			context = {
+				'employee': employee,
+				'branch': branch,
+			}
+
+			return render(request, self.template_name, context)
+		except Employee.DoesNotExist:
+			raise Http404("Employee does not exist")
+
+	def post(self, request, branch_id, employee_id):
+		name = request.POST['name']
+		salary = request.POST['salary']
+		phone = request.POST['phone']
+
+		branch_obj = Branch.objects.get(id=int(branch_id))
+		employee_obj = Employee.objects.get(id=employee_id)
+		employee_obj.name = name;
+		employee_obj.salary = salary;
+		employee_obj.phone = phone;
+		employee_obj.save()
+
+		print employee_obj.salary
+
+		if request.is_ajax():
+			return JsonResponse({"success": True, "employee_name": employee_obj.name})
+
+class AdminStoreView(AdminRequiredMixin, TemplateView):
+	template_name = "megamart/admin/store.html"
+
+	def get(self, request, branch_id):
+		try:
+			branch = Branch.objects.get(id=branch_id)
+			context = {
+				'branch': branch,
+			}
+
+			return render(request, self.template_name, context)
+
+		except Branch.DoesNotExist:
+			raise Http404("Branch does not exist")
+
+	def post(self, request, branch_id):
+		name = request.POST['name']
+		username = request.POST['username']
+		password = request.POST['password']
+
+		try:
+			branch = Branch.objects.get(id=branch_id)
+			storeadmin = StoreAdmin.objects.get(branch=branch)
+			storeadmin.name = name
+			storeadmin.save()
+			user = User.objects.get(username=storeadmin.user.username)
+			user.username = username
+			user.set_password(password)
+			user.save()
+
+		except StoreAdmin.DoesNotExist:
+			user = User.objects.create_user(username=username,
+											password=password)
+			storeadmin = StoreAdmin(name=name, user=user, branch=branch)
+			storeadmin.save()
+
+		if request.is_ajax():
+			return JsonResponse({"success": True, "storeadmin_name": storeadmin.name})

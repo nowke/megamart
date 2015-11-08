@@ -7,7 +7,8 @@
 
 	<div class="grid full-width">
 		{% for branch in city.branch_set.all %}
-		<div class="col-1-4">
+		{% url 'admin_branch_detail' branch.id as branch_url %}
+		<div class="col-1-4" onclick="window.location = '{{ branch_url }}'">
 			<div class="box">
 				<h3> {{ branch.title|title }} </h3>
 				<p>  {{ branch.address|title }} </p>

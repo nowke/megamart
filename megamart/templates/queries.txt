@@ -1,0 +1,55 @@
+AdminBranchesView
+	Q1: SELECT `admins_city`.`id`,
+        		`admins_city`.`name`
+		FROM `admins_city`
+		ORDER BY `admins_city`.`name` ASC
+
+		desc: Get all cities
+
+	Q2: SELECT `admins_branch`.`id`,
+		       `admins_branch`.`title`,
+		       `admins_branch`.`city_id`,
+		       `admins_branch`.`address`
+		FROM `admins_branch`
+		WHERE `admins_branch`.`city_id` = 4
+
+		desc: Get branches by city
+
+AdminBranchDetailView
+	Q1: SELECT `admins_branch`.`id`,
+		       `admins_branch`.`title`,
+		       `admins_branch`.`city_id`,
+		       `admins_branch`.`address`
+		FROM `admins_branch`
+		WHERE `admins_branch`.`id` = 7
+
+		desc: Get branch by id
+
+	Q2:
+		SELECT `admins_city`.`id`,
+		       `admins_city`.`name`
+		FROM `admins_city`
+		WHERE `admins_city`.`id` = 4
+
+		desc: Get city by id
+
+	Q3:
+		SELECT `admins_storeadmin`.`id`,
+		       `admins_storeadmin`.`user_id`,
+		       `admins_storeadmin`.`name`,
+		       `admins_storeadmin`.`branch_id`
+		FROM `admins_storeadmin`
+		WHERE `admins_storeadmin`.`branch_id` = 7
+
+		desc: Get Store admin by branch id
+
+	Q4:
+		SELECT `store_employee`.`id`,
+		       `store_employee`.`name`,
+		       `store_employee`.`salary`,
+		       `store_employee`.`phone`,
+		       `store_employee`.`branch_id`
+		FROM `store_employee`
+		WHERE `store_employee`.`branch_id` = 7
+
+		desc: Get employees by Branch id

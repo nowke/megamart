@@ -1,0 +1,58 @@
+{% extends 'product_manager/dashboard.html' %}
+
+{% block content %}
+
+<h2>  Add Category </h2>
+
+<ul class="messages" id="messages">
+    <li class="success" id="success">
+    	
+    </li>
+</ul>
+
+<div class="grid full-width content-center">
+	<div class="form-container">
+		<form method="POST" action="" id="add_cat_form">
+		{% csrf_token %}
+			<input type="text" name="title" placeholder="Category" autofocus required>
+
+			<input type="submit" class="btn" value="Add" id="submit_btn">
+		</form>
+	</div>
+</div>
+
+
+{% endblock %}
+
+{% block nav_add_category %}active{% endblock %}
+
+{% block javascript %}
+<script>
+	$("#messages").hide();
+
+	$("#submit_btn").click(function(event) {
+		event.preventDefault();
+		var formData = $("#add_cat_form").serialize();
+
+		$.ajax({
+			type: "POST",
+			url: "{% url 'product_manager:add_category' %}",
+			data: formData,
+			success: function(data) {
+				$("#messages").show();
+				var successStr = "<i class=\"fa fa-fw fa-check\"></i> Category  \
+				<strong>" + data['category_title'] + "</strong> has been added successfully!";
+
+				$("#success").html(successStr);
+				$("#add_cat_form").trigger('reset');
+
+		        $("#success").delay(5000).fadeOut('slow');
+
+			},
+			error: function(response, error) {
+				console.log(error);
+			}
+		})
+	}) 
+</script>
+{% endblock %}

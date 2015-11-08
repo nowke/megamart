@@ -20,6 +20,7 @@ class ProductSet(models.Model):
 class Employee(models.Model):
 	name = models.CharField(max_length=40)
 	salary = models.PositiveIntegerField()
+	phone = models.CharField(max_length=10, default='')
 	branch = models.ForeignKey(Branch)
 
 	def __str__(self):

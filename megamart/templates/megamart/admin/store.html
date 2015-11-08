@@ -1,0 +1,59 @@
+{% extends 'megamart/admin/base_dashboard.html' %}
+
+{% block content %}
+<h2> 
+	<a href="{% url 'admin_branches' %}">Branches</a> <small>&gt;</small> 
+	<a href="{% url 'admin_branch_detail' branch.id %}">{{ branch.title }}</a>
+	<small>&gt;</small> Store Admin
+</h2>
+
+<ul class="messages" id="messages">
+    <li class="success" id="success">
+    	
+    </li>
+</ul>
+
+<div class="grid full-width content-center">
+	<div class="form-container">
+		<form method="POST" action="" id="add_admin_form">
+		{% csrf_token %}
+			<input type="text" name="name" placeholder="Admin Name" autofocus required value="{{ branch.storeadmin.name }}">
+			<input type="text" name="username" placeholder="Username" autofocus required value="{{ branch.storeadmin.user.username }}">
+			<input type="password" name="password" placeholder="Password" autofocus required>
+			
+			<input type="submit" class="btn" value="Save admin" id="submit_btn">
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block nav_branches %}active{% endblock %}
+
+{% block javascript %}
+<script>
+	$("#messages").hide();
+
+	$("#submit_btn").click(function(event) {
+		event.preventDefault();
+		var formData = $("#add_admin_form").serialize();
+		$.ajax({
+			type: "POST",
+			url: "{% url 'admin_store_new' branch.id %}",
+			data: formData,
+			success: function(data) {
+				$("#messages").show();
+				var successStr = "<i class=\"fa fa-fw fa-check\"></i> Admin  \
+				<strong>" + data['storeadmin_name'] + "</strong> has been updated successfully!";
+				$("#success").html(successStr);
+
+		        $("#success").delay(5000).fadeOut('slow');
+
+			},
+			error: function(response, error) {
+				console.log(error);
+			}
+		})
+	}) 
+</script>
+{% endblock %}

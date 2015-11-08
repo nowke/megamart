@@ -27,7 +27,7 @@ class Branch(models.Model):
 class StoreAdmin(models.Model):
 	user = models.OneToOneField(User, unique=True)
 	name = models.CharField(max_length=40)
-	branch = models.ForeignKey(Branch)
+	branch = models.OneToOneField(Branch)
 
 	def __str__(self):
 		return "%s - %s" % (self.name, self.branch.title)

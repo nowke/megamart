@@ -23,12 +23,16 @@
 		</a>
 	</div>
 
+	
 	<ul>
+	{% block nav %}
 		<li><a href="{% url 'admin_home' %}" class="{% block nav_home %}{% endblock %}"> Dashboard </a></li>
 		<li><a href="{% url 'admin_branches' %}" class="{% block nav_branches %}{% endblock %}"> Branches </a></li>
 		<li><a href="#" class="{% block nav_employees %}{% endblock %}"> Employees </a></li>
 		<li><a href="#" class="{% block nav_analytics %}{% endblock %}"> Analytics </a></li>
+	{% endblock %}
 	</ul>
+	
 </section>
 
 <section class="content">
