@@ -1,0 +1,95 @@
+{% extends 'store/dashboard.html' %}
+
+{% block content %}
+
+<h2> <a href="{% url 'store:home' %}">Stock</a> &gt; Add Product </h2>
+
+<ul class="messages" id="messages">
+    <li class="success" id="success">
+    	
+    </li>
+</ul>
+
+<div class="grid full-width content-center">
+	<div class="form-container">
+		<form method="POST" action="" id="add_prod_form">
+		{% csrf_token %}
+			<select name="category" id="category">
+				<option value="" disabled selected>Select your category</option>
+				{% for category in categories %}
+				<option value="{{ category.id }}">
+					{{ category.title }}
+				</option>
+				{% endfor %}
+			</select>
+
+			<select name="product" id="product">
+
+			</select>
+
+			<input type="text" name="quantity" placeholder="Quantitiy" required>
+			<input type="text" name="expiry_date" placeholder="Expiry date" required onfocus="(this.type='date')">
+			<input type="text" name="min_quantity" placeholder="Minimum quantity to retain" required>
+
+			<input type="submit" class="btn" value="Add" id="submit_btn">
+		</form>
+	</div>
+</div>
+
+
+{% endblock %}
+
+{% block nav_stock %}active{% endblock %}
+
+{% block javascript %}
+<script>
+	$("#messages").hide();
+
+	$("#submit_btn").click(function(event) {
+		event.preventDefault();
+		var formData = $("#add_prod_form").serialize();
+
+		$.ajax({
+			type: "POST",
+			url: "{% url 'store:add_product' %}",
+			data: formData,
+			success: function(data) {
+				$("#messages").show();
+				var successStr = "<i class=\"fa fa-fw fa-check\"></i> Product  \
+				<strong>" + data['product_name'] + "</strong> has been added successfully!";
+
+				$("#success").html(successStr);
+				$("#add_prod_form").trigger('reset');
+
+		        $("#success").delay(5000).fadeOut('slow');
+
+			},
+			error: function(response, error) {
+				console.log(error);
+			}
+		})
+	})
+
+	$("#category").on('change', function() {
+		var cat_id = this.value;
+		var csrf = $('input[name=csrfmiddlewaretoken]')[0].value;
+		$.ajax({
+			type: "POST",
+			url: "{% url 'store:add_product' %}",
+			data: {"getCat": true, "cat_id": cat_id, "csrfmiddlewaretoken": csrf},
+			success: function(data) {
+				$('#product').html("");
+				$.each(data, function(i, item) {
+					$('#product').append($('<option>', {
+						value: item["id"],
+						text: item["title"],
+					}));
+				});
+			},
+			error: function(response, error) {
+				console.log(response);
+			}
+		})
+	}); 
+</script>
+{% endblock %}

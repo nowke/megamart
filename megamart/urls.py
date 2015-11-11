@@ -24,7 +24,7 @@ urlpatterns = patterns('',
 
     url(r'^dashboard/', include('customer.urls', namespace='customer')),
     url(r'^manage_product/', include('product_manager.urls', namespace='product_manager')),
-    url(r'^store/', include('store.urls', namespace='store')),
+    url(r'^store/', include('admins.urls', namespace='store')),
 
     url(r'^admin/', include(admin.site.urls)),
     # url(r'^explorer/', include('explorer.urls')),

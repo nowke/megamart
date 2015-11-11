@@ -1,0 +1,21 @@
+{% extends 'store/dashboard.html' %}
+
+{% block content %}
+
+<h2> <a href="{% url 'store:home' %}">Category</a> &gt; {{ category.title }} </h2>
+
+<div class="grid full-width">
+	{% for product in products %}
+	<div class="col-1-4" onclick="window.location = ''">
+		<div class="box">
+			<h3> {{ product.product.name }} </h3>
+			<h2> {{ product.quantity }} items </h2>
+			<h2> Expires on {{ product.expiry_date }} </h2>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+
+{% endblock %}
+
+{% block nav_stock %}active{% endblock %}

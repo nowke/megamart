@@ -36,11 +36,15 @@ class LoginPageView(TemplateView):
 				return redirect('admin_home')
 			else:
 				try:
-					product_manager = ProductManager(user=user)
+					product_manager = ProductManager.objects.get(user=user)
 					login(request, user)
 					return redirect('product_manager:home')
 				except ProductManager.DoesNotExist:
-					print 'No Product manager'
+					store_admin = StoreAdmin.objects.get(user=user)
+					login(request, user)
+					return redirect('store:home')
+				except StoreAdmin.DoesNotExist:
+					print 'No store admin'
 		else:
 			print 'Invalid login'
 
