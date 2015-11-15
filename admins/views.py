@@ -136,6 +136,9 @@ class StoreBillView(StoreAdminRequiredMixin, TemplateView):
 				mega_user = MegaMartUser.objects.get(user__username=username)
 			except MegaMartUser.DoesNotExist:
 				mega_user = MegaMartUser.objects.get(user__username='anonymous')
+
+			if 'anonymous' in request.POST:
+				mega_user = MegaMartUser.objects.get(user__username='anonymous')				
 			
 			product_ids = request.POST.getlist('product_id')
 			product_quantities = request.POST.getlist('product_quantity')
@@ -163,8 +166,30 @@ class StoreBillView(StoreAdminRequiredMixin, TemplateView):
 
 					bill_amount += total_amount
 					order_obj.save()
+					
+					try:
+						product_set_branch = ProductSet.objects.filter(product=product, branch=branch)[0]
+						product_set_branch.quantity -= quantity
+						product_set_branch.save()
+					except IndexError:
+						pass
 
 				order_set.bill_amount = bill_amount
 				order_set.save()
 
-			return HttpResponse("200ok")
+
+
+			return redirect("store:billView", order_set.id)
+
+class StoreBillGenView(StoreAdminRequiredMixin, TemplateView):
+	template_name = "store/bill_view.html"
+
+	def get(self, request, order_set_id):
+		try:
+			order_set_obj = OrderSet.objects.get(id=order_set_id)
+			context = {
+				"order_set": order_set_obj
+			}
+			return render(request, self.template_name, context)
+		except OrderSet.DoesNotExist:
+			pass

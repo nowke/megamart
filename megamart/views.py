@@ -12,6 +12,7 @@ from .mixins import AdminRequiredMixin
 from admins.models import City, Branch, StoreAdmin
 from store.models import Employee
 from product_manager.models import ProductManager
+from customer.models import MegaMartUser
 
 class HomePageView(TemplateView):
 	template_name = "megamart/home.html"
@@ -40,11 +41,21 @@ class LoginPageView(TemplateView):
 					login(request, user)
 					return redirect('product_manager:home')
 				except ProductManager.DoesNotExist:
+					pass
+
+				try:
 					store_admin = StoreAdmin.objects.get(user=user)
 					login(request, user)
 					return redirect('store:home')
 				except StoreAdmin.DoesNotExist:
-					print 'No store admin'
+					pass
+					
+				try:
+					customer = MegaMartUser.objects.get(user=user)
+					login(request, user)
+					return redirect('customer:home')
+				except MegaMartUser.DoesNotExist:
+					print 'No user'
 		else:
 			print 'Invalid login'
 

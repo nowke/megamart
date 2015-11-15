@@ -1,0 +1,41 @@
+{% extends 'customer/dashboard.html' %}
+
+{% block content %}
+<h2> <a href="{% url 'customer:home' %}">All Purchases</a> &gt; {{ order_set.branch }}
+	({{ order_set.bill_date }})
+</h2>
+
+<table>
+	<thead>
+		<tr>
+			<th> Product</th>
+			<th> Quantity </th>
+			<th> Price/unit </th>
+			<th> Sub Total </th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for order in order_set.order_set.all %}
+		<tr>
+			<td> {{ order.product.name }} </td>
+			<td> {{ order.quantity|floatformat }} </td>
+			<td> {{ order.product.price|floatformat }} </td>
+			<td> {{ order.total_amount|floatformat }} </td>
+		</tr>
+		{% endfor %}
+		<tr>
+			<td>
+				<h2> Total </h2>
+			</td>	
+			<td></td>
+			<td></td>
+			<td>
+				<h1> {{ order_set.bill_amount|floatformat }}
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+{% endblock %}
+
+{% block nav_home %}active{% endblock %}

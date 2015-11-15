@@ -1,0 +1,44 @@
+{% extends 'store/dashboard.html' %}
+
+{% block content %}
+
+<h1> Bill - {{ order_set.megamartuser.name }}</h1>
+<hr>
+<p> On: <strong>{{ order_set.bill_date }}</strong></p>
+
+<table>
+	<thead>
+		<tr>
+			<th> Product</th>
+			<th> Quantity </th>
+			<th> Price/unit </th>
+			<th> Sub Total </th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for order in order_set.order_set.all %}
+		<tr>
+			<td> {{ order.product.name }} </td>
+			<td> {{ order.quantity|floatformat }} </td>
+			<td> {{ order.product.price|floatformat }} </td>
+			<td> {{ order.total_amount|floatformat }} </td>
+		</tr>
+		{% endfor %}
+		<tr>
+			<td>
+				<h2> Total </h2>
+			</td>	
+			<td></td>
+			<td></td>
+			<td>
+				<h1> {{ order_set.bill_amount|floatformat }}
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+
+{% endblock %}
+
+{% block nav_bill %}active{% endblock %}

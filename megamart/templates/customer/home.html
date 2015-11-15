@@ -1,0 +1,22 @@
+{% extends 'customer/dashboard.html' %}
+
+{% block content %}
+<h1> All Purchases </h1>
+	
+
+<div class="grid full-width">
+	{% for order_set in customer.orderset_set.all %}
+	{% url 'customer:order' order_set.id as order_url %}
+	<div class="col-1-3" onclick="window.location = '{{ order_url }}'">
+		<div class="box">
+			<h3> {{ order_set.branch.title }} </h3>
+			<h2> {{ order_set.bill_date }} </h2>
+			<p> Purchased {{ order_set.order_set.count }} items </p>
+			<h2> Bill: Rs. {{ order_set.bill_amount|floatformat }} </h2>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}
+
+{% block nav_home %}active{% endblock %}

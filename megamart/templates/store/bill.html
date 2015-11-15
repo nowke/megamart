@@ -52,7 +52,7 @@
 </table>
 
 <div class="div-center">
-	<a href="javascript:void(0);" class="btn-add" style="float:none;" id="add_row"> <i class="fa fa-fw fa-plus-circle"></i> Add Row </a>
+	<a href="javascript:void(0);" class="btn-add" style="float:none;" id="add_row"> <i class="fa fa-fw fa-plus-circle"></i> Add Item </a>
 </div>
 </form>
 {% endblock %}
@@ -161,6 +161,11 @@
 		var sub_total = quantity * price;
 		row.find(".product_sub_total").html(sub_total);
 	}
+
+	$("#anonymous").click(function() {
+		$("#username").toggle(!this.checked);
+		$("#user_details").toggle(!this.checked);
+	})
 
 
 </script>

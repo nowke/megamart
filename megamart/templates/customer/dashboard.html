@@ -1,0 +1,11 @@
+{% extends 'megamart/admin/base_dashboard.html' %}
+
+{% block content %}
+
+
+{% endblock %}
+
+{% block nav %}
+	<li><a href="{% url 'customer:home' %}" class="{% block nav_home %}{% endblock %}"> Purchases </a></li>
+	<li><a href="#" class="{% block nav_exp %}{% endblock %}"> Expenses </a></li>
+{% endblock %}
