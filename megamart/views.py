@@ -71,7 +71,28 @@ class RegisterPageView(TemplateView):
 	template_name = "megamart/register.html"
 
 	def post(self, request):
-		pass
+
+		if request.is_ajax():
+			uname = request.POST['uname']
+			try:
+				User.objects.get(username=uname)
+				return JsonResponse({"success": False})
+			except User.DoesNotExist:
+				return JsonResponse({"success": True})
+
+		username = request.POST['username']
+		email = request.POST['email']
+		password = request.POST['password']
+		full_name = request.POST['full_name']
+		phone = request.POST['phone']
+
+		user = User.objects.create_user(username=username, password=password)
+		user.save()
+
+		customer = MegaMartUser(user=user, name=full_name, phone=phone, email=email)
+		customer.save()
+		logout(request)
+		return redirect('login')
 
 class QueryView(View):
 	def get(self, request):

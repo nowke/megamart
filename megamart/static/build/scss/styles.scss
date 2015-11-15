@@ -1,3 +1,14 @@
 @import "includes/general";
 @import "includes/header";
 @import "includes/body_cover";
+
+form p.error {
+	margin: 10px;
+	color: red;
+	font-weight: 700;
+	// display: none;
+}
+
+form p.avail {
+	color: green;
+}

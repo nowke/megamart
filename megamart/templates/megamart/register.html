@@ -2,19 +2,91 @@
 {% block content %}
 
 <div class="small-container">
-	<form method="POST" action="">
+	<form method="POST" action="" id="reg-form">
 	{% csrf_token %}
 		<h2> Register </h2>
-		<input type="text" name="username" placeholder="User Name" autofocus>
-		<input type="email" name="email" placeholder="Email">
-		<input type="password" name="password" placeholder="Password">
-		<input type="password" name="password_copy" placeholder="Retype Password">
-		<input type="text" name="full_name" placeholder="Full Name">
-		<input type="tel" name="phone" placeholder="Phone No.">
-		<input type="submit" class="btn" value="Register">
+		<input type="text" name="username" placeholder="User Name" autofocus id="username"  autocomplete="off">
+		<p class="error" id="uname_error"> Username already taken </p>
+		<p class="error avail" id="uname_success"> Available </p>
+		<input type="email" name="email" placeholder="Email" requried>
+		<input type="password" name="password" placeholder="Password" required id="password">
+		<input type="password" name="password_copy" placeholder="Retype Password" required id="password_copy">
+		<p class="error" id="pass_error"> Passwords do not match </p>
+		<input type="text" name="full_name" placeholder="Full Name" required>
+		<input type="tel" name="phone" placeholder="Phone No." required>
+		<input type="submit" class="btn" value="Register" id="register-btn">
 	</form>
 </div>	
 
 {% endblock %}
 
 {% block head-color %}inverted{% endblock %}
+
+{% block javascript %}
+<script>
+	$("#pass_error").hide();
+	$("#uname_error").hide();
+	$("#uname_success").hide();
+
+	$("#register-btn").click(function(event) {
+		event.preventDefault();
+		if (validatePass) {
+			$("#reg-form").submit();
+		}
+
+	});
+	$("#password").keyup(function() {
+		if ($("#password_copy").val()) {
+			validatePass();
+		}
+	})
+
+	$("#password_copy").keyup(function() {
+		validatePass();
+	})
+
+	var validatePass = function() {
+		if ($("#password").val() !== $("#password_copy").val()) {
+			$("#pass_error").show();
+			return false;
+		} else {
+			$("#pass_error").hide();
+			return true;
+		}
+	};
+	var csrf = $('input[name=csrfmiddlewaretoken]')[0].value;
+	$("#username").keyup(function() {
+		validateUser();
+	})
+
+	var validateUser = function() {
+		var username = $("#username").val();
+		if (username != "") {
+			$.ajax({
+				type: 'POST',
+				url: '{% url "register" %}',
+				data: {"uname": username, "csrfmiddlewaretoken": csrf},
+				success: function(data) {
+					if (data["success"]) {
+						$("#uname_success").show();
+						$("#uname_error").hide();
+						return true;
+					} else {
+						$("#uname_success").hide();
+						$("#uname_error").show();
+						return false;
+					}
+				},
+				error: function(error, response) {
+					console.log(error);
+					return false;
+				}
+			})
+		} else {
+			$("#uname_success").hide();
+			$("#uname_error").hide();
+			return false;
+		}
+	}
+</script>
+{% endblock %}
