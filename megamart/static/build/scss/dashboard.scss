@@ -350,3 +350,10 @@ a.btn-danger:active, a.btn-danger:hover {
 .btn-add:hover, .btn-add:active {
 	background-color: darken($primary-text-hover, 5%);
 }
+
+.div-center {
+	margin: 10px auto;
+	width: 100%;
+    display: flex;
+    justify-content: center;
+}

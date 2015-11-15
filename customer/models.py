@@ -20,8 +20,8 @@ class MegaMartUser(models.Model):
 
 class OrderSet(models.Model):
 	megamartuser = models.ForeignKey(MegaMartUser)
-	bill_amount = models.FloatField()
-	bill_date = models.DateTimeField()
+	bill_amount = models.FloatField(null=True)
+	bill_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 	branch = models.ForeignKey(Branch)
 
 	def __str__(self):

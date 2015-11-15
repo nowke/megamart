@@ -1,0 +1,167 @@
+{% extends 'store/dashboard.html' %}
+
+{% block content %}
+<form action="" method="POST" id="genBill">
+<div class="grid full-width">
+	<div class="col-1-2">
+		<h1> Billing </h1>
+	</div>
+	<div class="col-1-2" style="padding-right:0;">
+		<a href="javascript:void(0);" class="btn-add" id="generate_bill" type="submit" onclick="$(this).closest('form').submit();"> <i class="fa fa-fw fa-file-text"></i> GENERATE BILL </a>
+	</div>
+</div>
+<br>
+<h2> Customer Details </h2><br>
+
+{% csrf_token %}
+<input type="checkbox" name="anonymous" id="anonymous"><label for="anonymous">Anonymous User</label>
+<br>
+
+<input type="text" name="custname" placeholder="Username" id="username">
+<p id="user_details"> 
+</p>
+
+<h1 style="float:right;" id="total_bill">Total Bill: <strong> 0 </strong></h1>
+<br><br>
+
+<table>
+	<thead>
+		<tr>
+			<th> Product id </th>
+			<th> Quantity </th>
+			<th> Product </th>
+			<th> Price/unit </th>
+			<th> Sub Total </th>
+			<th> Actions </th>
+		</tr>
+	</thead>
+	<tbody id="table_body">
+		<tr>
+			<td> <input type="text" name="product_id" class="input-med"> </td>
+			<td> <input type="number" name="product_quantity" class="input-small" value="1"></td>
+			<td class="product_name"> [None] </td>
+			<td class="product_price"> 0 </td>
+			<td class="product_sub_total"> 0 </td>
+			<td> 
+				<a href="javascript:void(0);" class="btn-danger remove_row"> <i class="fa fa-fw fa-trash"></i>Delete </a>
+			</td>
+		</tr>
+		
+	</tbody>
+
+</table>
+
+<div class="div-center">
+	<a href="javascript:void(0);" class="btn-add" style="float:none;" id="add_row"> <i class="fa fa-fw fa-plus-circle"></i> Add Row </a>
+</div>
+</form>
+{% endblock %}
+
+{% block nav_bill %}active{% endblock %}
+
+{% block javascript %}
+<script>
+
+	var table_row_str = '<tr> \
+			<td> <input type="text" name="product_id" class="input-med"> </td> \
+			<td> <input type="number" name="product_quantity" class="input-small" value="1"></td> \
+			<td class="product_name">  [None] </td> \
+			<td class="product_price"> 0 </td> \
+			<td class="product_sub_total"> 0 </td> \
+			<td>  \
+				<a href="javascript:void(0);" class="btn-danger remove_row" > <i class="fa fa-fw fa-trash"></i>Delete </a> \
+			</td> \
+		</tr>';
+
+	var get_total_bill_str =  function(bill) {
+		return 'Total Bill: <strong>' + bill + '</strong>';
+	};
+
+	var calc_bill = function() {
+		var sub_total_elements = $('.product_sub_total');
+		bill_amount = 0;
+
+		for (var i=0; i<sub_total_elements.length; i++) {
+			var sub_total = parseFloat(sub_total_elements[i].textContent);
+			bill_amount += sub_total;
+		}	
+
+		$("#total_bill").html(get_total_bill_str(bill_amount));
+	};
+
+	$("#username").keyup(function(event) {
+		var username = this.value;
+		var csrf = $('input[name=csrfmiddlewaretoken]')[0].value;
+		var tabs = "&emsp;&emsp;&emsp;"
+		$.ajax({
+			type: "POST",
+			url: "{% url 'store:bill' %}",
+			data: {"findUser": true, "username": username, "csrfmiddlewaretoken": csrf},
+			success: function(data) {
+				if (data['username']) {
+					$("#user_details").html("<strong> Name: </strong>" + data['name'] + tabs + "<strong> Phone: </strong>" + data['phone'] + tabs + "<strong> Email: </strong>" + data['email']);
+				} else {
+					$("#user_details").html("");
+				}
+			},
+			error: function(response, error) {
+				$("#user_details").html("");
+			}
+		})
+	});
+
+	$("#add_row").click(function() {
+		$("#table_body").append(table_row_str);
+	});
+
+	$("#table_body").on("click", ".remove_row", function() {
+		var num_rows = $("#table_body tr").length;
+		if (num_rows > 1) {
+			$(this).parent().parent().remove();
+		}
+		calc_bill();
+	});
+
+	$("#table_body").on("keyup", "input[name=product_id]", function(event) {
+		var product_id = this.value;
+		var csrf = $('input[name=csrfmiddlewaretoken]')[0].value;
+		var t_row = $(this).parent().parent();
+		var quantity = t_row.find("input[name=product_quantity]")[0].value;
+
+		$.ajax({
+			type: "POST",
+			url: "{% url 'store:bill' %}",
+			data: {"getProdDetail": true, "product_id": product_id, "csrfmiddlewaretoken": csrf},
+			success: function(data) {
+				if (data["name"]) {
+					t_row.find(".product_name").html(data["name"]);
+					t_row.find(".product_price").html(data["price"]);
+				} else {
+					t_row.find(".product_name").html("");	
+					t_row.find(".product_price").html("0");	
+				}
+				update_quantity(t_row, quantity);
+				calc_bill();
+			},
+			error: function(response, error) {
+				console.log(error);
+			}
+		});	
+		
+	});
+
+	$("#table_body").on("keyup", "input[name=product_quantity]", function(event) {
+		var t_row = $(this).parent().parent();
+		update_quantity(t_row, this.value);
+		calc_bill();
+	});
+
+	var update_quantity = function(row, quantity) {
+		var price = row.find(".product_price").text();
+		var sub_total = quantity * price;
+		row.find(".product_sub_total").html(sub_total);
+	}
+
+
+</script>
+{% endblock %}

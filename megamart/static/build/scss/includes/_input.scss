@@ -2,6 +2,7 @@
 
 input[type=text], input[type=password],
 input[type=email], input[type=tel], input[type=date],
+input[type=number],
 textarea, select {
 	margin: 10px;
 	font-size: 1.3em;
@@ -20,6 +21,7 @@ input[type=password]:focus, input[type=password].focus,
 input[type=email]:focus, input[type=email].focus,
 input[type=tel]:focus, input[type=tel].focus,
 input[type=date]:focus, input[type=date].focus,
+input[type=number]:focus, input[type=number].focus,
 textarea.focus, textarea:focus,
 select.focus, select:focus
 {
@@ -44,4 +46,26 @@ select.focus, select:focus
 
 .btn:hover, .btn:active, .btn.hover, .btn.active {
 	background-color: darken($primary-text-color, 5%);
+}
+
+input[type=checkbox], input[type=radio] {
+	width: 20px;
+	height: 20px;
+	margin: 10px;
+}
+
+label {
+	height: 0px;
+    margin: 10px;
+    bottom: 40px;
+    font-weight:600;
+    font-size: 1.4em;
+}
+
+.input-small {
+	width: 100px;
+}
+
+.input-med {
+	width: 200px;
 }
