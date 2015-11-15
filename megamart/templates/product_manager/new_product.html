@@ -3,7 +3,12 @@
 {% block content %}
 
 <h2> <a href="{% url 'product_manager:home' %}">Products</a> <small>&gt;</small> 
-	<a href="{% url 'product_manager:category' category.id %}">{{ category.title }}</a> <small>&gt;</small> New product
+	{% if product %}
+		Edit
+	{% else %}
+	<a href="{% url 'product_manager:category' category.id %}">{{ category.title }}</a> <small>&gt;</small>
+	New
+	{% endif %}
 </h2>
 
 <ul class="messages" id="messages">
@@ -16,10 +21,10 @@
 	<div class="form-container">
 		<form method="POST" action="" id="add_prod_form">
 		{% csrf_token %}
-			<input type="text" name="title" placeholder="Product Title" autofocus required>
-			<input type="text" name="price" placeholder="Price/Unit" autofocus required>
+			<input type="text" name="title" placeholder="Product Title" autofocus required value="{{ product.name }}">
+			<input type="text" name="price" placeholder="Price/Unit" autofocus required value="{{ product.price }}">
 
-			<input type="submit" class="btn" value="Add" id="submit_btn">
+			<input type="submit" class="btn" value="{% if product %}Update{% else %}Add{% endif %}" id="submit_btn">
 		</form>
 	</div>
 </div>
@@ -38,7 +43,7 @@
 
 		$.ajax({
 			type: "POST",
-			url: "{% url 'product_manager:add_product' category.id %}",
+			url: "{% if product %}{% url 'product_manager:edit_product' product.id %}{% else %}{% url 'product_manager:add_product' category.id %}{% endif %}",
 			data: formData,
 			success: function(data) {
 				$("#messages").show();
@@ -46,7 +51,6 @@
 				<strong>" + data['product_title'] + "</strong> has been added successfully!";
 
 				$("#success").html(successStr);
-				$("#add_prod_form").trigger('reset');
 
 		        $("#success").delay(5000).fadeOut('slow');
 

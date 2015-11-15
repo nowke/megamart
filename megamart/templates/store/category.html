@@ -9,7 +9,7 @@
 	<div class="col-1-4" onclick="window.location = ''">
 		<div class="box">
 			<h3> {{ product.product.name }} </h3>
-			<h2> {{ product.quantity }} items </h2>
+			<h2> {{ product.quantity|floatformat }} items </h2>
 			<h2> Expires on {{ product.expiry_date }} </h2>
 		</div>
 	</div>

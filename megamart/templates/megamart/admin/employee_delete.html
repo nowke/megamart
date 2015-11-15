@@ -1,0 +1,41 @@
+{% extends 'megamart/admin/base_dashboard.html' %}
+
+{% block content %}
+
+<h2> Delete ?
+</h2>
+{% csrf_token %}
+<div class="grid full-width content-center">
+	<div class="dialog">
+		<p> Are you sure you want to delete Employee: <br><strong>{{ employee.name }}</strong> ? </p>
+		<a href="javascript:history.back()" class="mbtn btn-warning"> <i class="fa fa-fw fa-edit"></i>No </a> 
+		<a href="javascript:void(0)" class="mbtn btn-danger" id="deleteEmp"> <i class="fa fa-fw fa-trash"></i>Yes </a>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block nav_employees %}active{% endblock %}
+
+{% block javascript %}
+<script>
+
+	$("#deleteEmp").click(function(event) {
+		event.preventDefault();
+		var emp_id = {{ employee.id }};
+		var csrf = $('input[name=csrfmiddlewaretoken]')[0].value;
+		$.ajax({
+			type: "POST",
+			url: "{% url 'admin_emp_delete' branch.id employee.id %}",
+			data: {"deleteEmp": true, "id": emp_id, "csrfmiddlewaretoken": csrf},
+			success: function(data) {
+				javascript:history.back();
+			},
+			error: function(response, error) {
+				console.log(error);
+			}
+		})
+	});
+
+</script>
+{% endblock %}

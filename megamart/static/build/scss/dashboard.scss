@@ -312,7 +312,7 @@ table > tbody > tr:nth-of-type(odd) {
     background-color: #f9f9f9;
 }
 
-table a:link, table a:visited {
+table a:link, table a:visited, a.mbtn:link, a.mbtn:visited {
 	margin: 5px;
 	display: inline-block;
 	text-decoration: none;
@@ -356,4 +356,13 @@ a.btn-danger:active, a.btn-danger:hover {
 	width: 100%;
     display: flex;
     justify-content: center;
+}
+
+.dialog {
+	width: 100%;
+	max-width: 600px;
+	align-self: center;
+	background-color: #fff;	
+	padding: 20px;
+	box-shadow: 0 10px 20px rgba(93,78,113,0.19), 0 6px 6px rgba(93,78,113,0.23);
 }

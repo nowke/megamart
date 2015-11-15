@@ -7,12 +7,14 @@ from django.http import HttpResponse, JsonResponse, Http404
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.db.models import Count
+from django.db.models import Q, F
 
 from .mixins import AdminRequiredMixin
 from admins.models import City, Branch, StoreAdmin
-from store.models import Employee
-from product_manager.models import ProductManager
-from customer.models import MegaMartUser
+from store.models import Employee, ProductSet
+from product_manager.models import ProductManager, Product
+from customer.models import MegaMartUser, OrderSet, Order
 
 class HomePageView(TemplateView):
 	template_name = "megamart/home.html"
@@ -67,6 +69,23 @@ class LogoutView(View):
 
 class RegisterPageView(TemplateView):
 	template_name = "megamart/register.html"
+
+	def post(self, request):
+		pass
+
+class QueryView(View):
+	def get(self, request):
+
+		# All Customers who ordered Product(68) more than 3 quantities
+		# all_orders = Order.objects.filter(Q(product__id=68), Q(quantity__gte=3)).values('order_set')
+		# all_cust = MegaMartUser.objects.filter(orderset__in=all_orders)
+		# print all_cust
+
+		# Branches having more than 2 customers ordered more than 100
+		all_branches = OrderSet.objects.filter(bill_amount__gte=100).values("megamartuser").distinct().values("branch").annotate(n=Count("megamartuser", distinct=True)).filter(n__gte=2)
+		print all_branches
+
+
 
 # DB Admin specific views
 class AdminHomeView(AdminRequiredMixin, TemplateView):
@@ -224,3 +243,53 @@ class AdminStoreView(AdminRequiredMixin, TemplateView):
 
 		if request.is_ajax():
 			return JsonResponse({"success": True, "storeadmin_name": storeadmin.name})
+
+class AdminDeleteEmployeeView(AdminRequiredMixin, TemplateView):
+	template_name = "megamart/admin/employee_delete.html"
+
+	def get(self, request, branch_id, employee_id):
+		try:
+			employee = Employee.objects.get(id=employee_id)
+			branch = Branch.objects.get(id=branch_id)
+
+			context = {
+				'employee': employee,
+				'branch': branch,
+			}
+
+			return render(request, self.template_name, context)
+		except Employee.DoesNotExist:
+			raise Http404("Employee does not exist")
+
+	def post(self, request, branch_id, employee_id):
+
+		employee = Employee.objects.get(id=employee_id)
+		employee.delete()
+
+		if request.is_ajax():
+			return JsonResponse({"success": True})
+
+class AdminStoreDeleteView(AdminRequiredMixin, TemplateView):
+	template_name = "megamart/admin/store_admin_delete.html"
+
+	def get(self, request, branch_id):
+		try:
+			branch = Branch.objects.get(id=branch_id)
+			context = {
+				'branch': branch,
+			}
+			return render(request, self.template_name, context)
+
+		except Branch.DoesNotExist:
+			raise Http404("Branch does not exist")
+
+	def post(self, request, branch_id):
+		try:
+			branch = Branch.objects.get(id=branch_id)
+			store_admin = StoreAdmin.objects.get(branch=branch)
+			store_admin.delete()
+
+			if request.is_ajax():
+				return JsonResponse({"success": True})
+		except Branch.DoesNotExist:
+			raise Http404("Branch does not exist")

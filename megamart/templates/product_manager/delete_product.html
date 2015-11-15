@@ -1,0 +1,42 @@
+{% extends 'product_manager/dashboard.html' %}
+
+{% block content %}
+
+<h2> <a href="{% url 'product_manager:home' %}">Products</a> <small>&gt;</small> 
+	Delete
+</h2>
+{% csrf_token %}
+<div class="grid full-width content-center">
+	<div class="dialog">
+		<p> Are you sure you want to delete Product: <br><strong>{{ product.name }}</strong> ? </p>
+		<a href="javascript:history.back()" class="mbtn btn-warning"> <i class="fa fa-fw fa-edit"></i>No </a> 
+		<a href="javascript:void(0)" class="mbtn btn-danger" id="deleteProd"> <i class="fa fa-fw fa-trash"></i>Yes </a>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block nav_products %}active{% endblock %}
+
+{% block javascript %}
+<script>
+
+	$("#deleteProd").click(function(event) {
+		event.preventDefault();
+		var product_id = {{ product.id }};
+		var csrf = $('input[name=csrfmiddlewaretoken]')[0].value;
+		$.ajax({
+			type: "POST",
+			url: "{% url 'product_manager:delete_product' product.id %}",
+			data: {"deleteProd": true, "id": product_id, "csrfmiddlewaretoken": csrf},
+			success: function(data) {
+				javascript:history.back();
+			},
+			error: function(response, error) {
+				console.log(error);
+			}
+		})
+	});
+
+</script>
+{% endblock %}

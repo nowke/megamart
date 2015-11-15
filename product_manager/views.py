@@ -66,3 +66,41 @@ class PmNewProductView(PmRequiredMixin, TemplateView):
 
 		if request.is_ajax():
 			return JsonResponse({"success": True, "product_title": product.name})
+
+class PmEditProductView(PmRequiredMixin, TemplateView):
+	template_name = "product_manager/new_product.html"
+
+	def get(self, request, product_id):
+		product = Product.objects.get(id=product_id)
+
+		context = {
+			'product': product,
+		}
+		return render(request, self.template_name, context)
+
+	def post(self, request, product_id):
+		product = Product.objects.get(id=product_id)
+		product.name = request.POST['title']
+		product.price = float(request.POST['price'])
+		product.save()
+
+		if request.is_ajax():
+			return JsonResponse({"success": True, "product_title": product.name})
+
+class PmDeleteProductView(PmRequiredMixin, TemplateView):
+	template_name = "product_manager/delete_product.html"
+
+	def get(self, request, product_id):
+		product = Product.objects.get(id=product_id)
+
+		context = {
+			'product': product,
+		}
+		return render(request, self.template_name, context)
+
+	def post(self, request, product_id):
+		product = Product.objects.get(id=product_id)
+		product.delete()
+
+		if request.is_ajax():
+			return JsonResponse({"success": True})

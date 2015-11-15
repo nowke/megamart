@@ -37,7 +37,9 @@
 	</thead>
 	<tbody id="table_body">
 		<tr>
-			<td> <input type="text" name="product_id" class="input-med"> </td>
+			<td> <input type="text" name="product_id" class="input-med">
+			<a href="/admin/store/productset/?branch__id__exact={{ branch.id }}" style="color:black;" target="popup"> <i class="fa fa-fw fa-search"></i> </a>
+			 </td>
 			<td> <input type="number" name="product_quantity" class="input-small" value="1"></td>
 			<td class="product_name"> [None] </td>
 			<td class="product_price"> 0 </td>
@@ -63,7 +65,9 @@
 <script>
 
 	var table_row_str = '<tr> \
-			<td> <input type="text" name="product_id" class="input-med"> </td> \
+			<td> <input type="text" name="product_id" class="input-med"> \
+				<a href="/admin/store/productset/?branch__id__exact={{ branch.id }}" style="color:black;" target="popup"> <i class="fa fa-fw fa-search"></i> </a> \
+			</td> \
 			<td> <input type="number" name="product_quantity" class="input-small" value="1"></td> \
 			<td class="product_name">  [None] </td> \
 			<td class="product_price"> 0 </td> \
@@ -167,6 +171,9 @@
 		$("#user_details").toggle(!this.checked);
 	})
 
-
+	function showPopup() {
+		href = this.href;
+		pritn
+	}
 </script>
 {% endblock %}

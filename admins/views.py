@@ -103,6 +103,13 @@ class StoreAddProductView(StoreAdminRequiredMixin, TemplateView):
 class StoreBillView(StoreAdminRequiredMixin, TemplateView):
 	template_name = "store/bill.html"
 
+	def get(self, request):
+		branch = getBranch(request.user)
+		context = {
+			'branch': branch,
+		}
+		return render(request, self.template_name, context)
+
 	@transaction.atomic
 	def post(self, request):
 		if "findUser" in request.POST:

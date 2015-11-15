@@ -1,0 +1,40 @@
+{% extends 'megamart/admin/base_dashboard.html' %}
+
+{% block content %}
+
+<h2> Delete ?
+</h2>
+{% csrf_token %}
+<div class="grid full-width content-center">
+	<div class="dialog">
+		<p> Are you sure you want to delete Store Admin: <br><strong>{{ branch.storeadmin.name }}</strong> ? </p>
+		<a href="javascript:history.back()" class="mbtn btn-warning"> <i class="fa fa-fw fa-edit"></i>No </a> 
+		<a href="javascript:void(0)" class="mbtn btn-danger" id="deleteAdmin"> <i class="fa fa-fw fa-trash"></i>Yes </a>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block nav_employees %}active{% endblock %}
+
+{% block javascript %}
+<script>
+
+	$("#deleteAdmin").click(function(event) {
+		event.preventDefault();
+		var csrf = $('input[name=csrfmiddlewaretoken]')[0].value;
+		$.ajax({
+			type: "POST",
+			url: "{% url 'admin_store_delete' branch.id  %}",
+			data: {"deleteAdmin": true, "csrfmiddlewaretoken": csrf},
+			success: function(data) {
+				javascript:history.back();
+			},
+			error: function(response, error) {
+				console.log(error);
+			}
+		})
+	});
+
+</script>
+{% endblock %}
