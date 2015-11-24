@@ -163,7 +163,7 @@
 	var update_quantity = function(row, quantity) {
 		var price = row.find(".product_price").text();
 		var sub_total = quantity * price;
-		row.find(".product_sub_total").html(sub_total);
+		row.find(".product_sub_total").html(sub_total.toFixed(1));
 	}
 
 	$("#anonymous").click(function() {

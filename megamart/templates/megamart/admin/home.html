@@ -1,5 +1,5 @@
 {% extends 'megamart/admin/base_dashboard.html' %}
-
+{% load staticfiles %}
 {% block content %}
 
 <h1> Dashboard </h1>
@@ -10,7 +10,7 @@
 			<i class="fa fa-fw fa-gear"></i>
 			<div class="small-stats-desc">
 				<h5> CPU Usage </h5>
-				<h4> 90% </h4>
+				<h4 id="cpu_per"> {{ cpu_percentage }}% </h4>
 			</div>	
 		</div>	
 	</div>
@@ -20,7 +20,7 @@
 			<i class="fa fa-fw fa-users"></i>
 			<div class="small-stats-desc">
 				<h5> Total Customers </h5>
-				<h4> 4200 </h4>
+				<h4> {{ total_users }} </h4>
 			</div>	
 		</div>	
 	</div>
@@ -30,7 +30,7 @@
 			<i class="fa fa-fw fa-user-plus"></i>
 			<div class="small-stats-desc">
 				<h5> New Customers </h5>
-				<h4> 56 </h4>
+				<h4> {{ today_users }} </h4>
 			</div>	
 		</div>	
 	</div>
@@ -40,12 +40,112 @@
 			<i class="fa fa-fw fa-shopping-cart"></i>
 			<div class="small-stats-desc">
 				<h5> Unique Orders </h5>
-				<h4> 6500</h4>
+				<h4> {{ unique_orders }}</h4>
 			</div>	
 		</div>	
 	</div>
+</div>
+<br>
+<br>
+<form method="POST" action="" id="show-stat-form">
+	{% csrf_token %}
+	<select id="cities">
+		<option value="0">Choose City</option>
+		{% for city in cities %}
+		<option value="{{ city.id }}" {% if branch.city.id == city.id %}selected{% endif %}>{{ city.name }}</option>
+		{% endfor %}
+	</select>
+
+	<select id="branches" name="branch">
+		
+		{% if branch %}
+			{% for b in all_branches_city %}
+			<option value="{{ b.id }}" {% if branch.id == b.id %}selected{% endif %}>{{ b.title }}</option>
+			{% endfor %}
+		{% else %}
+		<option value="0"> Select branch </option>
+		{% endif %}
+	</select>
+
+	<a href="javascript:void(0)" class="btn-add" style="float:none;" id="show-stat" onclick="document.getElementById('show-stat-form').submit();"> <i class="fa fa-fw fa-plus-circle"></i> ADD </a>
+</form>
+
+
+<div id="container" style="width:100%; height:400px;">
+                
 </div>
 
 {% endblock %}
 
 {% block nav_home %}active{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'js/highcharts.js' %}"></script>
+<script>
+	function getCPU() {
+		$.ajax({
+			type: "GET",
+			url: "{% url 'admin_home' %}",
+			data: {"cpu": true},
+			success: function(data) {
+				$("#cpu_per").html(data['cpu'] + "%");
+				setTimeout(getCPU, 1000);
+			}
+		});
+	}
+
+	getCPU();
+
+		$("#cities").on("change", function() {
+			$.ajax({
+				type: "GET",
+				url: "{% url 'admin_home' %}",
+				data: {"getBranches": true, "city_id": this.value},
+				success: function(data) {
+					$("#branches").html("");
+					for (var i=0; i<data.length; i++) {
+						$("#branches").append("<option value='" + data[i]['id'] + "'> " + data[i]['name'] + "</option>");
+					}
+				},
+			});
+		});
+
+
+     var chart = $('#container').highcharts({
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Current week sales'
+        },
+        xAxis: {
+            categories: [
+            	{% for branch in branchData %}
+            	'{{ branch.day }}',
+            	{% endfor %}
+            ]
+        },
+        yAxis: {
+            title: {
+                text: 'Sales (Rs)'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: [{
+            name: '{{ branch.title }}',
+            data: [
+            	{% for branch in branchData %}
+            	{{ branch.sales }},
+            	{% endfor %}
+            ]
+        }]
+    });
+</script>
+{% endblock %}

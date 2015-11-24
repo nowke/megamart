@@ -1,0 +1,29 @@
+{% extends 'megamart/admin/base_dashboard.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<h1> Sales Report </h1>
+
+<table>
+	<thead>
+		<tr>
+			<th> Branch Name </th>
+			<th> City </th>
+			<th> Total Sales </th>
+		
+		</tr>
+	</thead>
+	<tbody>
+		{% for branch in report %}
+		<tr>
+			<td> {{ branch.branch__title }} </td>
+			<td> {{ branch.branch__city__name }} </td>
+			<td> {{ branch.s }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
+
+{% block nav_report %}active{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'store/dashboard.html' %}
+
+{% block content %}
+
+<h1> Out of stock (Less than minimum quantity) </h1>
+
+<div class="grid full-width">
+	{% for product_set in out_of_stock %}
+	
+	<div class="col-1-4">
+		<div class="box">
+			<h3> {{ product_set.product.name }} </h3>
+			<h2> Expires on {{ product_set.expiry_date }} </h2>
+			<h2> Total {{ product_set.quantity|floatformat }} items </h2>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+
+{% endblock %}
+
+{% block nav_out %}active{% endblock %}

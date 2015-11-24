@@ -1,8 +1,21 @@
 {% extends 'store/dashboard.html' %}
-
+{% load staticfiles %}
 {% block content %}
 
-<h1> Bill - {{ order_set.megamartuser.name }}</h1>
+<div class="grid full-width only-print">
+	<center><h1> megamart </h1></center>
+	<center> <p> {{ order_set.branch.title }}, {{ order_set.branch.city.name }}</p></center>
+	<center> <p> {{ order_set.branch.address }}</p></center>
+</div>	
+
+<div class="grid full-width">
+	<div class="col-1-2">
+		<h1> Bill {% if order_set.megamartuser.user.username != 'anonymous' %} - {% endif %}{{ order_set.megamartuser.name }}</h1>
+	</div>
+	<div class="col-1-2" style="padding-right:0;">
+	<a href="javascript:void(0);" class="btn-add" id="print_bill" onclick="window.print();"> <i class="fa fa-fw fa-print"></i> Print </a>
+	</div>
+</div>
 <hr>
 <p> On: <strong>{{ order_set.bill_date }}</strong></p>
 
@@ -42,3 +55,11 @@
 {% endblock %}
 
 {% block nav_bill %}active{% endblock %}
+
+{% block cssimport %}
+<link rel="stylesheet" media="print" href="{% static 'css/print.min.css' %}">
+{% endblock %}
+
+{% block brand %}
+Megamart BILL - {{ order_set.megamartuser.name }}
+{% endblock %}

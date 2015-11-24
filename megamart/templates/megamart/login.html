@@ -8,6 +8,7 @@
 		<h2> Login </h2>
 		<input type="text" name="username" placeholder="User Name" autofocus>
 		<input type="password" name="password" placeholder="Password">
+		{% if loginError %}<p class="error" id="pass_error"> Invalid username or password </p>{% endif %}
 		<input type="submit" class="btn" value="Login">
 	</form>
 </div>

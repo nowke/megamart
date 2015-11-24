@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Megamart Administration - Home</title>
+	<title>{% block brand %}Megamart Administration - Home{% endblock %}</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -28,8 +28,7 @@
 	{% block nav %}
 		<li><a href="{% url 'admin_home' %}" class="{% block nav_home %}{% endblock %}"> Dashboard </a></li>
 		<li><a href="{% url 'admin_branches' %}" class="{% block nav_branches %}{% endblock %}"> Branches </a></li>
-		<li><a href="#" class="{% block nav_employees %}{% endblock %}"> Employees </a></li>
-		<li><a href="#" class="{% block nav_analytics %}{% endblock %}"> Analytics </a></li>
+		<li><a href="{% url 'report' %}" class="{% block nav_report %}{% endblock %}"> Report </a></li>
 	{% endblock %}
 	</ul>
 	
@@ -42,7 +41,7 @@
 		</a>
 		<a href="#">
 			<img src="{% static 'img/avatar.png' %}">
-			<h5> John Doe </h5>
+			<h5> {{ request.user.first_name }} {{ request.user.last_name }} </h5>
 		</a>
 	</div>
 	<div class="dashboard-content">

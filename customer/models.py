@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from admins.models import Branch
 from product_manager.models import Product
@@ -21,11 +22,16 @@ class MegaMartUser(models.Model):
 class OrderSet(models.Model):
 	megamartuser = models.ForeignKey(MegaMartUser)
 	bill_amount = models.FloatField(null=True)
-	bill_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+	bill_date = models.DateTimeField(blank=True, null=True)
 	branch = models.ForeignKey(Branch)
 
 	def __str__(self):
 		return "%s - %s on %s" % (self.megamartuser, self.branch, self.bill_date)
+
+	def save(self, *args, **kwargs):
+		if not self.bill_date:
+			self.bill_date = timezone.now()
+		super(OrderSet, self).save(*args, **kwargs)
 
 	class Meta:
 		verbose_name = 'Order Set'

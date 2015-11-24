@@ -5,7 +5,9 @@ from django.http import HttpResponse, JsonResponse, Http404
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.db import IntegrityError, transaction
+from django.db.models import F
 
 from collections import Counter
 
@@ -177,6 +179,8 @@ class StoreBillView(StoreAdminRequiredMixin, TemplateView):
 					try:
 						product_set_branch = ProductSet.objects.filter(product=product, branch=branch)[0]
 						product_set_branch.quantity -= quantity
+						if product_set_branch.quantity < 0:
+							product_set_branch.quantity = 0
 						product_set_branch.save()
 					except IndexError:
 						pass
@@ -200,3 +204,42 @@ class StoreBillGenView(StoreAdminRequiredMixin, TemplateView):
 			return render(request, self.template_name, context)
 		except OrderSet.DoesNotExist:
 			pass
+
+class StoreExpiredView(StoreAdminRequiredMixin, TemplateView):
+	template_name = "store/expired.html"
+
+	def get(self, request):
+		branch = getBranch(request.user)
+		now = timezone.now()
+		expired_product_set = ProductSet.objects.filter(branch=branch, expiry_date__lte=now)
+		context = {
+			'branch': branch,
+			'expired': expired_product_set,
+		}
+
+		return render(request, self.template_name, context)
+
+class StoreOutOfStock(StoreAdminRequiredMixin, TemplateView):
+	template_name = "store/out.html"
+
+	def get(self, request):
+		branch = getBranch(request.user)
+		out_of_stock = ProductSet.objects.filter(branch=branch, quantity__lte=F('min_quantity_retain'))
+
+		context = {
+			'branch': branch,
+			'out_of_stock': out_of_stock,
+		}
+		return render(request, self.template_name, context)
+
+class StoreViewBills(StoreAdminRequiredMixin, TemplateView):
+	template_name = "store/view_bills.html"
+
+	def post(self, request):
+		bill_id = request.POST['bill_id']
+		
+		try:
+			order_set = OrderSet.objects.get(id=bill_id)
+			return redirect('store:billView', bill_id)
+		except OrderSet.DoesNotExist:
+			return render(request, self.template_name)

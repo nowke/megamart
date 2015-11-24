@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-from .views import LoginPageView, HomePageView, RegisterPageView, QueryView
+from .views import LoginPageView, HomePageView, RegisterPageView, QueryView, AdminReportView
 from .views import AdminHomeView, LogoutView, AdminBranchesView, AdminAddBranchView, AdminBranchDetailView
 from .views import AdminEmployeeNewView, AdminEditEmployeeView, AdminStoreView, AdminDeleteEmployeeView, AdminStoreDeleteView
 
@@ -15,6 +15,7 @@ urlpatterns = patterns('',
 
     # DB Admin views
     url(r'^administrator/home$', AdminHomeView.as_view(), name='admin_home'),
+    url(r'^administrator/report$', AdminReportView.as_view(), name='report'),
     url(r'^administrator/branches$', AdminBranchesView.as_view(), name='admin_branches'),
     url(r'^administrator/branches/new$', AdminAddBranchView.as_view(), name='admin_add_branch'),
     url(r'^administrator/branches/(?P<branch_id>[0-9]+)$', AdminBranchDetailView.as_view(), name='admin_branch_detail'),

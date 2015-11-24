@@ -6,9 +6,15 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, Http404
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth.models import User
-from django.db.models import Count
+from django.contrib.auth.models import User, Group
 from django.db.models import Q, F
+from django.utils import timezone
+from django.db.models import Count, Min, Sum, Avg
+from django.utils.timezone import localtime, now
+
+from datetime import time
+import datetime
+import psutil
 
 from .mixins import AdminRequiredMixin
 from admins.models import City, Branch, StoreAdmin
@@ -57,9 +63,9 @@ class LoginPageView(TemplateView):
 					login(request, user)
 					return redirect('customer:home')
 				except MegaMartUser.DoesNotExist:
-					print 'No user'
+					return render(request, self.template_name, {"loginError": True})
 		else:
-			print 'Invalid login'
+			return render(request, self.template_name, {"loginError": True})
 
 class LogoutView(View):
 	def get(self, request):
@@ -86,8 +92,15 @@ class RegisterPageView(TemplateView):
 		full_name = request.POST['full_name']
 		phone = request.POST['phone']
 
-		user = User.objects.create_user(username=username, password=password)
-		user.save()
+		if not username or not email or not password or not full_name or not phone:
+			return redirect('register')
+		first_name = full_name.split()[0]
+		last_name = full_name.split()[1]
+		try:
+			user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name)
+			user.save()
+		except:
+			return redirect('register')
 
 		customer = MegaMartUser(user=user, name=full_name, phone=phone, email=email)
 		customer.save()
@@ -103,14 +116,111 @@ class QueryView(View):
 		# print all_cust
 
 		# Branches having more than 2 customers ordered more than 100
-		all_branches = OrderSet.objects.filter(bill_amount__gte=100).values("megamartuser").distinct().values("branch").annotate(n=Count("megamartuser", distinct=True)).filter(n__gte=2)
-		print all_branches
+		# all_branches = OrderSet.objects.filter(bill_amount__gte=100).values("megamartuser").distinct().values("branch").annotate(n=Count("megamartuser", distinct=True)).filter(n__gte=2)
+		# print all_branches
+
+		# all_emps = Employee.objects.filter(Q(branch__title="J P Nagar") | Q(branch__title="KORAMANGALA"), Q(salary__gte=20000), Q(salary__lte=30000)).values("name", "salary", "branch__title")
+		# print all_emps
+
+		# t = OrderSet.objects.filter(branch__title="KORAMANGALA").aggregate(bill=Sum("bill_amount"))
+		# print t
+
+		# all_branches = Branch.objects.all()
+		# l = OrderSet.objects.filter(branch__in=all_branches).values("branch").distinct().annotate(s=Sum("bill_amount")).values("branch__title", "s")
+		# print l
+		pass
 
 
 
 # DB Admin specific views
 class AdminHomeView(AdminRequiredMixin, TemplateView):
 	template_name = "megamart/admin/home.html"
+
+	def get(self, request):
+		if request.is_ajax() and request.GET.get('cpu', None):
+			cpu_percentage =  psutil.cpu_percent(interval=1)
+
+			data = {
+				'cpu': cpu_percentage,
+			}
+			return JsonResponse(data)
+
+		if request.is_ajax() and request.GET.get('getBranches', None):
+			city_id = int(request.GET['city_id'])
+			all_branches = Branch.objects.filter(city__id=city_id)
+			branches = []
+			for branch in all_branches:
+				b_dict = {
+					'id': int(branch.id),
+					'name': str(branch.title),
+				}
+				branches.append(b_dict)
+			return JsonResponse(branches, safe=False)
+
+		if request.is_ajax() and request.GET.get('getBranchSales', None):
+			branch_id = int(request.GET['branch_id'])
+
+			
+			return JsonResponse(data, safe=False)
+
+		today = timezone.now().date()
+		today_start = timezone.datetime.combine(today, time())
+		cpu_percentage =  psutil.cpu_percent(interval=1)
+
+		unique_orders = OrderSet.objects.filter(~Q(megamartuser__user__username='anonymous')).count()
+		no_of_users = MegaMartUser.objects.count()
+		today_users = MegaMartUser.objects.filter(user__date_joined__gte=today_start).count()
+
+		all_cities = City.objects.all()
+
+		context = {
+			'total_users': no_of_users,
+			'today_users': today_users,
+			'unique_orders': unique_orders,
+			'cpu_percentage': cpu_percentage,
+			'cities': all_cities,
+		}
+		return render(request, self.template_name, context)
+
+	def post(self, request):
+		branch_id = int(request.POST['branch'])
+
+		today = localtime(timezone.now())
+		week_dates = [today - timezone.timedelta(days=i) for i in range(7)]
+		data = []
+		for day in week_dates[::-1]:
+			sale_sum = OrderSet.objects.filter(branch__id=branch_id, bill_date__startswith=day.date()).aggregate(bill=Sum("bill_amount"))
+			data_dict = {
+				'day': str(day.day) + " " + day.strftime("%a"),
+				'sales': sale_sum["bill"] or 0,
+			}
+			data.append(data_dict)
+		all_cities = City.objects.all()
+		cur_branch = Branch.objects.get(id=branch_id)
+
+		all_branches_city = Branch.objects.filter(city=cur_branch.city)
+
+		today = timezone.now().date()
+		today_start = timezone.datetime.combine(today, time())
+		cpu_percentage =  psutil.cpu_percent(interval=1)
+
+		unique_orders = OrderSet.objects.filter(~Q(megamartuser__user__username='anonymous')).count()
+		no_of_users = MegaMartUser.objects.count()
+		today_users = MegaMartUser.objects.filter(user__date_joined__gte=today_start).count()
+
+
+		context = {
+			'branchData': data,
+			'branch': cur_branch,
+			'cities': all_cities,
+			'all_branches_city': all_branches_city,
+			'total_users': no_of_users,
+			'today_users': today_users,
+			'unique_orders': unique_orders,
+			'cpu_percentage': cpu_percentage,
+		}
+		return render(request, self.template_name, context)
+
 
 class AdminBranchesView(AdminRequiredMixin, TemplateView):
 	template_name = "megamart/admin/branches.html"
@@ -259,6 +369,11 @@ class AdminStoreView(AdminRequiredMixin, TemplateView):
 		except StoreAdmin.DoesNotExist:
 			user = User.objects.create_user(username=username,
 											password=password)
+			user.is_staff=True
+			store_admin_group = Group.objects.get(name='store_admin')
+			user.groups.add(store_admin_group)
+			user.save()
+
 			storeadmin = StoreAdmin(name=name, user=user, branch=branch)
 			storeadmin.save()
 
@@ -314,3 +429,16 @@ class AdminStoreDeleteView(AdminRequiredMixin, TemplateView):
 				return JsonResponse({"success": True})
 		except Branch.DoesNotExist:
 			raise Http404("Branch does not exist")
+
+class AdminReportView(AdminRequiredMixin, TemplateView):
+	template_name = "megamart/admin/report.html"
+
+	def get(self, request):
+		all_branches = Branch.objects.all()
+		k = OrderSet.objects.filter(branch__in=all_branches).values("branch").distinct().annotate(s=Sum("bill_amount")).values("branch__title", "branch__city__name", "s")
+		print k
+		context = {
+			'report': k,
+		}
+
+		return render(request, self.template_name, context)

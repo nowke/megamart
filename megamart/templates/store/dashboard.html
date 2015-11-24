@@ -8,5 +8,7 @@
 {% block nav %}
 	<li><a href="{% url 'store:home' %}" class="{% block nav_stock %}{% endblock %}"> Stock </a></li>
 	<li><a href="{% url 'store:bill' %}" class="{% block nav_bill %}{% endblock %}"> Bill </a></li>
-	<li><a href="#" class="{% block nav_exp %}{% endblock %}"> Expired </a></li>
+	<li><a href="{% url 'store:expired' %}" class="{% block nav_exp %}{% endblock %}"> Expired </a></li>
+	<li><a href="{% url 'store:out' %}" class="{% block nav_out %}{% endblock %}"> Out of Stock </a></li>
+	<li><a href="{% url 'store:view_bills' %}" class="{% block nav_view_bill %}{% endblock %}"> View Bills </a></li>
 {% endblock %}
