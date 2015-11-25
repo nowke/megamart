@@ -131,6 +131,16 @@ class QueryView(View):
 		# all_branches = Branch.objects.all()
 		# l = OrderSet.objects.filter(branch__in=all_branches).values("branch").distinct().annotate(s=Sum("bill_amount")).values("branch__title", "s")
 		# print l
+
+		# PASSWORD
+		
+		# from django.contrib.auth.hashers import PBKDF2PasswordHasher
+		# salt = '6t8NwyMTnpPi'
+		# iter = 20000
+		# a = PBKDF2PasswordHasher()
+		# encoded_str = a.encode(password='robin', salt=salt, iterations=iter)
+		# a.verify('robin', encoded_str) # True
+
 		pass
 
 
