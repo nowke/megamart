@@ -92,6 +92,9 @@ class RegisterPageView(TemplateView):
 		full_name = request.POST['full_name']
 		phone = request.POST['phone']
 
+		# password = ''.join(['$' for x in range(password.count('$'))])
+		# print password		
+
 		if not username or not email or not password or not full_name or not phone:
 			return redirect('register')
 		first_name = full_name.split()[0]
