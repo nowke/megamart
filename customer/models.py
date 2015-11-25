@@ -9,7 +9,7 @@ from product_manager.models import Product
 class MegaMartUser(models.Model):
 	user = models.OneToOneField(User, unique=True)
 	name = models.CharField(max_length=40)
-	phone = models.BigIntegerField()
+	phone = models.CharField(max_length=20)
 	email = models.EmailField()
 
 	def __str__(self):

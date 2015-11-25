@@ -8,7 +8,8 @@
 		<input type="text" name="username" placeholder="User Name" autofocus id="username"  autocomplete="off">
 		<p class="error" id="uname_error"> Username already taken </p>
 		<p class="error avail" id="uname_success"> Available </p>
-		<input type="email" name="email" placeholder="Email" requried>
+		<input type="email" name="email" placeholder="Email" requried id="email">
+		<p class="error" id="email_error"> Invalid Email </p>
 		<input type="password" name="password" placeholder="Password" required id="password">
 		<input type="password" name="password_copy" placeholder="Retype Password" required id="password_copy">
 		<p class="error" id="pass_error"> Passwords do not match </p>
@@ -25,12 +26,13 @@
 {% block javascript %}
 <script>
 	$("#pass_error").hide();
+	$("#email_error").hide();
 	$("#uname_error").hide();
 	$("#uname_success").hide();
 
 	$("#register-btn").click(function(event) {
 		event.preventDefault();
-		if (validatePass) {
+		if (validatePass() && validateEmail()) {
 			$("#reg-form").submit();
 		}
 
@@ -54,6 +56,18 @@
 			return true;
 		}
 	};
+
+	var validateEmail = function() {
+		var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/i;
+		if (re.test($("#email").val() )) {
+			$("#email_error").hide();
+			return true;
+		} else {
+			$("#email_error").show();
+			return false;
+		}
+	}
+
 	var csrf = $('input[name=csrfmiddlewaretoken]')[0].value;
 	$("#username").keyup(function() {
 		validateUser();

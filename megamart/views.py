@@ -15,12 +15,16 @@ from django.utils.timezone import localtime, now
 from datetime import time
 import datetime
 import psutil
+import string
+import re
 
 from .mixins import AdminRequiredMixin
 from admins.models import City, Branch, StoreAdmin
 from store.models import Employee, ProductSet
 from product_manager.models import ProductManager, Product
 from customer.models import MegaMartUser, OrderSet, Order
+
+EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
 class HomePageView(TemplateView):
 	template_name = "megamart/home.html"
@@ -37,6 +41,7 @@ class LoginPageView(TemplateView):
 	def post(self, request):
 		username = request.POST['username']
 		password = request.POST['password']
+
 		user = authenticate(username=username, password=password)
 		if user is not None:
 			if user.is_active and user.is_superuser:
@@ -93,9 +98,16 @@ class RegisterPageView(TemplateView):
 		phone = request.POST['phone']
 
 		# password = ''.join(['$' for x in range(password.count('$'))])
-		# print password		
+		# print password	
 
-		if not username or not email or not password or not full_name or not phone:
+		# special_chars =  string.punctuation
+		# k = ''
+		# for i in password:
+		# 	if i in special_chars:
+		# 		k += i
+		# password = k
+
+		if not username or not EMAIL_REGEX.match(email) or not password or not full_name or not phone:
 			return redirect('register')
 		first_name = full_name.split()[0]
 		last_name = full_name.split()[1]
