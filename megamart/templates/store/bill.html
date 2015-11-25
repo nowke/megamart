@@ -78,7 +78,7 @@
 		</tr>';
 
 	var get_total_bill_str =  function(bill) {
-		return 'Total Bill: <strong>' + bill + '</strong>';
+		return 'Total Bill: <strong>' + bill.toFixed(1) + '</strong>';
 	};
 
 	var calc_bill = function() {
