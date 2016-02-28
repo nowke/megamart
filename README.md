@@ -6,30 +6,25 @@ A Retail store management system
 
 ### Clone the repo ###
 
-```
-#!bash
-
+```sh
 $ git clone https://bitbucket.org/nowke/mega-mart
 $ cd mega-mart
 ```
 ### Setup virtual environment
-```
-#!bash
+```sh
 $ mkvirtualenv megamart
 $ workon megamart
 ```
 
 ### Install requirements
-```
-#!bash
+```sh
 $ pip install -r requirements.txt
 ```
 
 ### Run django-specific commands
-```
-#!bash
-$ python manage.py collectstatic
-$ python manage.py makemigrations
-$ python manage.py migrate
-$ python manage.py runserver 0.0.0.0:8000
+```sh
+$ ./manage.py collectstatic
+$ ./manage.py makemigrations
+$ ./manage.py migrate
+$ ./manage.py runserver
 ```
