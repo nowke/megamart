@@ -5,7 +5,7 @@ A Retail store management system
 **Features**
 
 * Authentication (Django)
-* Role Management (Customer, Store manager, Product manager, Admin)
+* Role Management - Login as *Customer, Store manager, Product manager, Admin*
 * Inventory Management - add, update products
 * Customer view - see purchased products
 * Branch management - add, update store branches
